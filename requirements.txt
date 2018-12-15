@@ -1,0 +1,5 @@
+verboselogs
+coloredlogs
+PyYAML
+gitpython
+coverage

@@ -1,0 +1,14 @@
+language: python
+python:
+  - "3.6"
+
+install:
+  - pip3 install -r requirements.txt
+
+script:
+  - make test
+  - make help
+
+notifications:
+  email: false
+
