@@ -1,3 +1,7 @@
+file_finder = find . -type f $(1) -not -path './venv/*'
+
+PY_FILES = $(call file_finder,-name "*.py")
+
 help:
 	python3 devsync.py --help
 
@@ -7,10 +11,10 @@ clean:
 
 .PHONY: test
 test:
-	python3 testrunner.py
+	python3 -m unittest
 
 coverage:
-	coverage run --source='devsync' testrunner.py
+	coverage run --source='devsync' python3 -m unittest
 	coverage report
 
 html_coverage: coverage
@@ -20,4 +24,12 @@ xml_coverage: coverage
 	coverage xml
 
 install:
-	sudo pip3 install -r requirements.txt
+	pip3 install -r requirements.txt
+
+check: check_format
+
+format:
+	$(PY_FILES) | xargs black
+
+check_format:
+	$(PY_FILES) | xargs black --diff --check

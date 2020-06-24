@@ -14,7 +14,7 @@ def init_logging():
     if not os.path.exists(log_dir):
         os.mkdir(log_dir)
 
-    coloredlogs.install(level='DEBUG', milliseconds=True, logger=dev_sync_logger)
+    coloredlogs.install(level="DEBUG", milliseconds=True, logger=dev_sync_logger)
     dev_sync_logger.setLevel(logging.DEBUG)
 
     fh = TimedRotatingFileHandler(LOGFILE, when="MIDNIGHT")

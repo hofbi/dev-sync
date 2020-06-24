@@ -3,3 +3,4 @@ coloredlogs
 PyYAML
 gitpython
 coverage
+black
