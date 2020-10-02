@@ -1,6 +1,7 @@
 # Dev Sync
 
 [![Actions Status](https://github.com/hofbi/dev-sync/workflows/CI/badge.svg)](https://github.com/hofbi/dev-sync)
+[![Actions Status](https://github.com/hofbi/dev-sync/workflows/CodeQL/badge.svg)](https://github.com/hofbi/dev-sync)
 [![Build Status](https://travis-ci.org/hofbi/dev-sync.svg?branch=master)](https://travis-ci.org/hofbi/dev-sync)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
