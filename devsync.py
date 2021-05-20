@@ -8,18 +8,18 @@ from devsync.config import NAME, VERSION, SCRIPT_DIR, SHORT_DEST
 
 
 def main():
-    logger.success("{} {}\n".format(NAME, VERSION))
+    logger.success(f"{NAME} {VERSION}\n")
 
     # Parsing Arguments
     args = parse_arguments()
     config = args.config.name
-    backup_target = YMLConfigParser.get_target_from_argument(SHORT_DEST, args.target[0])
+    backup_target = YMLConfigParser.get_target_from_argument(SHORT_DEST, args.target)
     report = args.dry_run
     last_update = args.last_update
 
     print_selected_config(config)
 
-    logger.notice("Starting Backup for {}\n".format(backup_target.path))
+    logger.notice(f"Starting Backup for {backup_target.path}\n")
     yaml_parser = YMLConfigParser(config)
     run_backup(yaml_parser, backup_target, last_update, report)
 
@@ -45,9 +45,8 @@ def parse_arguments():
         "target",
         metavar="DESTINATION",
         type=str,
-        nargs=1,
         help="Destination path where backup should be stored --> Also accepts destination shortcuts "
-        "defined in " + SHORT_DEST.replace(SCRIPT_DIR + "/", ""),
+        "defined in " + str(SHORT_DEST).replace(SCRIPT_DIR + "/", ""),
     )
     parser.add_argument(
         "config",

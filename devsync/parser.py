@@ -1,6 +1,5 @@
 import yaml
-import os
-import pathlib
+from pathlib import Path
 
 from devsync.data import BackupFolder, Target
 from devsync.log import logger
@@ -11,9 +10,8 @@ class YMLConfigParser:
         self.__content = self.get_yaml_content(config)
 
     @staticmethod
-    def get_yaml_content(filename):
-        with open(filename, "r") as stream:
-            return yaml.load(stream)
+    def get_yaml_content(filename: Path):
+        return yaml.load(filename.read_bytes(), Loader=yaml.FullLoader)
 
     def parse_backup_folder(self):
         backup_folders = self.__content["backupFolder"]
@@ -23,29 +21,26 @@ class YMLConfigParser:
         ]
 
     @staticmethod
-    def parse_targets(short_dest_file):
+    def parse_targets(short_dest_file: Path):
         content = YMLConfigParser.get_yaml_content(short_dest_file)
         if content:
-            targets = content["shortDests"]
-            return {target["shortDest"]: target["destPath"] for target in targets}
-
+            return {
+                target["shortDest"]: target["destPath"]
+                for target in content["shortDests"]
+            }
         return {}
 
     @staticmethod
-    def get_target_from_argument(short_dest_file, target_arg):
-        if not os.path.exists(short_dest_file):
-            pathlib.Path(short_dest_file).touch()
+    def get_target_from_argument(short_dest_file: Path, target_arg):
+        short_dest_file.touch()
 
         targets = YMLConfigParser.parse_targets(short_dest_file)
         if target_arg in targets:
             logger.info(
-                'Using shortcut "{}" as destination path to: {}\n'.format(
-                    target_arg, targets[target_arg]
-                )
+                f"Using shortcut {target_arg} as destination path to: {targets[target_arg]}\n"
             )
             return Target(targets[target_arg])
-        else:
-            return Target(target_arg)
+        return Target(target_arg)
 
     def parse_home(self):
         return self.__content["home"]

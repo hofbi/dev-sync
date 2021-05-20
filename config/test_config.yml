@@ -1,6 +1,0 @@
-home: /home/user                    # Source root folder
-
-backupFolder:                       # Folders that should be saved (relative to "home" variable)
-  - path: Pictures                  # Folder name
-  - path: Documents
-  - path: Development

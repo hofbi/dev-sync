@@ -1,5 +1,0 @@
-shortDests:                         # Destination Shortcuts
-  - shortDest: TEST                 # Destination name (selectable by CLI argument)
-    destPath: /tmp                  # Root path of destination
-  - shortDest: USB
-    destPath: /media/user/usbdevice
