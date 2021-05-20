@@ -188,4 +188,4 @@ class HgRepo(Repo):
 
     @staticmethod
     def parse_remote(item):
-        return item[len("default = ") :].lstrip()
+        return item[len("default = ") :].lstrip()  # noqa E203 (conflicts with black)

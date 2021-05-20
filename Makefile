@@ -26,10 +26,13 @@ xml_coverage: coverage
 install:
 	pip3 install -r requirements.txt
 
-check: check_format
+check: check_format flake8
 
 format:
 	$(PY_FILES) | xargs black
 
 check_format:
 	$(PY_FILES) | xargs black --diff --check
+
+flake8:
+	$(PY_FILES) | xargs flake8
