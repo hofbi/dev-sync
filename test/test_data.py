@@ -1,4 +1,3 @@
-import unittest
 from pyfakefs.fake_filesystem_unittest import TestCase
 
 from pathlib import Path

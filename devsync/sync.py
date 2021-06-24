@@ -51,8 +51,8 @@ class RSync:
         options = copy.deepcopy(RSync.OPTIONS)
         if report:
             options.append("-n")  # Rsync Dry Run
-        for path in excludes:
-            options.append('--exclude="{}"'.format(path))
+
+        options.extend([f'--exclude="{path}"' for path in excludes])
 
         return " ".join(options)
 
@@ -67,7 +67,7 @@ class RSync:
                 f"\tOptions: {options}\n"
             )
             subprocess.check_call(
-                "rsync {} {} {}".format(options, element.path, target.path),
+                f"rsync {options} {element.path} {target.path}",
                 shell=True,
                 cwd=self.__root,
             )
@@ -80,12 +80,10 @@ class RepoSync:
 
     def update_repos(self, target, last_update, report):
         all_repos = self.get_all_repos()
-        logger.verbose(str(len(all_repos)) + " Repos found in all paths")
+        logger.verbose(f"{len(all_repos)} repos found in all paths")
 
         all_repos = [repo for repo in all_repos if repo.is_update_required(last_update)]
-        logger.verbose(
-            "{} Repos to update on target {}\n".format(len(all_repos), target.path)
-        )
+        logger.verbose(f"{len(all_repos)} repos to update on target {target.path}\n")
 
         for repo in all_repos:
             repo.update_repo_on_target(self.__root, target, report)
@@ -94,9 +92,7 @@ class RepoSync:
         all_repos = []
         for element in self.__backup_folders:
             repos = element.repos
-            logger.verbose(
-                "--> " + str(len(repos)) + " Repos found in path " + element.path
-            )
+            logger.verbose(f"--> {len(repos)} repos found in path {element.path}")
             all_repos.extend(repos)
 
         return all_repos
