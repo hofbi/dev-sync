@@ -1,26 +1,15 @@
-import unittest
-
+from pyfakefs.fake_filesystem_unittest import TestCase
 from unittest.mock import patch, MagicMock
+
+from pathlib import Path
+
 from devsync.log import init_logging
 
 
-class LogTest(unittest.TestCase):
-    @patch("devsync.log.os")
-    @patch(
-        "devsync.log.logging.handlers.TimedRotatingFileHandler.__init__",
-        MagicMock(return_value=None),
-    )
-    def test_init_logging_create_log_dir_if_not_existing(self, mock_os):
-        mock_os.path.exists.return_value = False
-        init_logging()
-        self.assertTrue(mock_os.mkdir.called)
+class LogTest(TestCase):
+    def setUp(self) -> None:
+        self.setUpPyfakefs()
 
-    @patch("devsync.log.os")
-    @patch(
-        "devsync.log.logging.handlers.TimedRotatingFileHandler.__init__",
-        MagicMock(return_value=None),
-    )
-    def test_init_logging_create_no_log_dir_if_already_existing(self, mock_os):
-        mock_os.path.exists.return_value = True
-        init_logging()
-        self.assertFalse(mock_os.mkdir.called)
+    def test_init_logging___logfile_path_does_not_exist__should_be_created(self):
+        init_logging(Path("logs/logfile"))
+        self.assertTrue(Path("logs/logfile").exists())
