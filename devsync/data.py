@@ -4,9 +4,30 @@ import git
 import datetime
 import subprocess
 from pathlib import Path
-from typing import List
+from typing import List, Union
 
 from devsync.log import logger
+
+
+class Target:
+    def __init__(self, destination_path: Union[str, Path]):
+        self.__path = Path(destination_path).absolute()
+        self.check_destination()
+
+    @property
+    def path(self) -> Path:
+        return self.__path
+
+    def check_destination(self) -> None:
+        if not Path(self.path).exists():
+            raise FileNotFoundError(f"Target dir {self.path} does not exist")
+
+    def is_relative_to(self, other) -> bool:
+        try:
+            Path(self.path).relative_to(other)
+        except Exception:
+            return False
+        return True
 
 
 class Repo:
@@ -30,9 +51,9 @@ class Repo:
             + str(datetime.datetime.utcfromtimestamp(self.get_latest_commit_time))
         )
 
-    def get_repo_target_path(self, root, target):
+    def get_repo_target_path(self, root, target: Target) -> Path:
         relative_path = self.path.replace(root, "")
-        return os.path.join(target.path, relative_path)
+        return target.path / relative_path
 
     def update_repo_on_target(self, root, target, report):
         self.print_update_report()
@@ -138,27 +159,6 @@ class HgRepo(Repo):
     @staticmethod
     def parse_remote(item):
         return item[len("default = ") :].lstrip()  # noqa E203 (conflicts with black)
-
-
-class Target:
-    def __init__(self, destination_path: Path):
-        self.__path = Path(destination_path).absolute()
-        self.check_destination()
-
-    @property
-    def path(self) -> Path:
-        return self.__path
-
-    def check_destination(self) -> None:
-        if not Path(self.path).exists():
-            raise FileNotFoundError(f"Target dir {self.path} does not exist")
-
-    def is_relative_to(self, other) -> bool:
-        try:
-            Path(self.path).relative_to(other)
-        except Exception:
-            return False
-        return True
 
 
 class BackupFolder:

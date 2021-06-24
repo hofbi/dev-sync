@@ -93,7 +93,7 @@ class RepoTest(unittest.TestCase):
     def test_get_repo_target_path_correct(self):
         repo = Repo("/foo/blub")
         self.assertEqual(
-            "/tmp/blub", repo.get_repo_target_path("/foo/", Target("/tmp"))
+            Path("/tmp/blub"), repo.get_repo_target_path("/foo/", Target("/tmp"))
         )
 
 
