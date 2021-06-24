@@ -18,8 +18,7 @@ def main():
     backup_target = Target(args.target)
 
     logger.verbose(
-        f'Use config from: {config.replace(SCRIPT_DIR + "/", "")}\n\n'
-        f"{config.read_text()}"
+        f"Use config from: {config.relative_to(SCRIPT_DIR)}\n\n{config.read_text()}"
     )
 
     logger.notice(f"Starting Backup for {backup_target.path}\n")

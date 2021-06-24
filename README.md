@@ -11,25 +11,20 @@ This is a python backup tool based on [rsync](https://rsync.samba.org/) includin
 ```shell
 Dev Sync 1.0
 
-usage: devsync.py [-h] [--last_update YEAR MONTH DAY] [--dry-run]
-                  DESTINATION CONFIG_FILE
+usage: devsync.py [-h] [--last_update YEAR MONTH DAY] [--dry-run] target config
 
 Backup Data and Repositories to external devices.
 
 positional arguments:
-  DESTINATION           Destination path where backup should be stored -->
-                        Also accepts destination shortcuts defined in
-                        res/shortdest.yml
-  CONFIG_FILE           Path to config file
+  target                Destination path the where backup should be stored
+  config                Path to config file
 
 optional arguments:
   -h, --help            show this help message and exit
   --last_update YEAR MONTH DAY
-                        Last time update was performed. This will just update
-                        repositories after this date. Format: YYYY MM DD
-                        (default: (1970, 1, 1))
-  --dry-run             Perform a dry run without making real changes
-                        (default: False)
+                        Last time update was performed. This will just update repositories after this date.
+                        Format: YYYY MM DD (default: (1970, 1, 1))
+  --dry-run             Perform a dry run without making real changes (default: False)
 ```
 
 ## Config
