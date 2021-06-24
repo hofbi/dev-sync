@@ -44,7 +44,7 @@ class SaveDataTest(TestCase):
         self.assertFalse(backup_folder.repos)
         self.assertFalse(backup_folder.has_repos)
 
-    def test_get_relative_repo_paths_no_repos_should_be_empty(self):
+    def test_get_relative_repo_paths_with_no_repos_should_be_empty(self):
         backup_folder = BackupFolder(Path("/home/user"), "test")
         backup_folder.find_repos_in_path()
 
@@ -52,7 +52,9 @@ class SaveDataTest(TestCase):
 
         self.assertFalse(repos)
 
-    def test_get_relative_repo_paths_one_repo_should_be_only_repo_folder_name(self):
+    def test_get_relative_repo_paths_with_one_repo_should_be_only_repo_folder_name(
+        self,
+    ):
         self.create_git_repo_in_path(Path("/home/user/test/repo"))
         backup_folder = BackupFolder(Path("/home/user"), "test")
         backup_folder.find_repos_in_path()
@@ -60,6 +62,24 @@ class SaveDataTest(TestCase):
         repos = backup_folder.get_relative_repo_paths()
 
         self.assertListEqual(["repo"], repos)
+
+    def test_find_repos_in_path_with_no_repos_should_be_empty(self):
+        backup_folder = BackupFolder(Path("/home/user"), "test")
+        backup_folder.find_repos_in_path()
+        self.assertFalse(backup_folder.has_repos)
+        self.assertFalse(backup_folder.repos)
+
+    def test_find_repos_in_path_with_one_repo_in_and_one_out_of_path_should_be_one_repo(
+        self,
+    ):
+        self.create_git_repo_in_path(Path("/home/user/test/repo_in"))
+        self.create_git_repo_in_path(Path("/home/user/repo_out"))
+        backup_folder = BackupFolder(Path("/home/user"), "test")
+
+        backup_folder.find_repos_in_path()
+
+        self.assertEqual("/home/user/test/repo_in", backup_folder.repos[0].path)
+        self.assertTrue(backup_folder.has_repos)
 
 
 class RepoTest(unittest.TestCase):
