@@ -34,7 +34,7 @@ class TargetTest(TestCase):
         self.assertTrue(unit.is_relative_to("/tmp"))
 
 
-class SaveDataTest(TestCase):
+class BackupFolderTest(TestCase):
     def setUp(self) -> None:
         self.setUpPyfakefs()
 
@@ -64,7 +64,7 @@ class SaveDataTest(TestCase):
 
         repos = backup_folder.get_relative_repo_paths()
 
-        self.assertListEqual(["repo"], repos)
+        self.assertListEqual([Path("repo")], repos)
 
     def test_find_repos_in_path_with_no_repos_should_be_empty(self):
         backup_folder = BackupFolder(Path("/home/user"), "test")
@@ -81,14 +81,17 @@ class SaveDataTest(TestCase):
 
         backup_folder.find_repos_in_path()
 
-        self.assertEqual("/home/user/test/repo_in", backup_folder.repos[0].path)
+        self.assertEqual(Path("/home/user/test/repo_in"), backup_folder.repos[0].path)
         self.assertTrue(backup_folder.has_repos)
 
 
-class RepoTest(unittest.TestCase):
+class RepoTest(TestCase):
+    def setUp(self) -> None:
+        self.setUpPyfakefs()
+
     def test_constructor(self):
         repo = Repo("/tmp")
-        self.assertEqual("/tmp", repo.path)
+        self.assertEqual(Path("/tmp"), repo.path)
 
     def test_get_repo_target_path_correct(self):
         repo = Repo("/foo/blub")
@@ -97,9 +100,12 @@ class RepoTest(unittest.TestCase):
         )
 
 
-class HgRepoTest(unittest.TestCase):
+class HgRepoTest(TestCase):
     HG_HEADS_DATE_LINE = "date:        Mon Nov 19 10:37:51 2018 +0100"
     HG_PATHS_DEFAULT_LINE = "default = https://server.com/user/repo"
+
+    def setUp(self) -> None:
+        self.setUpPyfakefs()
 
     def test_parse_date_valid(self):
         self.assertEqual(1542620271, HgRepo.parse_date(HgRepoTest.HG_HEADS_DATE_LINE))
@@ -115,7 +121,10 @@ class HgRepoTest(unittest.TestCase):
         self.assertEqual("Hg", repo.repo_type)
 
 
-class GitRepoTest(unittest.TestCase):
+class GitRepoTest(TestCase):
+    def setUp(self) -> None:
+        self.setUpPyfakefs()
+
     def test_get_repo_type_git(self):
         repo = GitRepo("")
         self.assertEqual("Git", repo.repo_type)
