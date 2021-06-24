@@ -3,26 +3,30 @@ import abc
 import git
 import datetime
 import subprocess
+from pathlib import Path
 
 from devsync.log import logger
 
 
 class Target:
     def __init__(self, destination_path):
-        self.path = destination_path
+        self.__path = str(Path(destination_path).absolute())
+        self.check_destination()
 
     @property
     def path(self):
         return self.__path
 
-    @path.setter
-    def path(self, destination_path):
-        self.__path = os.path.abspath(destination_path)
-        self.check_destination()
-
     def check_destination(self):
-        if not os.path.exists(self.path):
+        if not Path(self.path).exists():
             raise FileNotFoundError("Target dir {} does not exist".format(self.path))
+
+    def is_relative_to(self, other):
+        try:
+            Path(self.path).relative_to(other)
+        except:
+            return False
+        return True
 
 
 class BackupFolder:
@@ -107,24 +111,24 @@ class Repo:
     @property
     @abc.abstractmethod
     def repo_type(self):
-        return ""
+        raise NotImplementedError("Don't call me, I am abstract")
 
     @property
     @abc.abstractmethod
     def get_latest_commit_time(self):
-        return 0
+        raise NotImplementedError("Don't call me, I am abstract")
 
     @abc.abstractmethod
     def pull_repo(self, target_path):
-        return
+        raise NotImplementedError("Don't call me, I am abstract")
 
     @abc.abstractmethod
     def clone_repo(self, url, target_path):
-        return
+        raise NotImplementedError("Don't call me, I am abstract")
 
     @abc.abstractmethod
     def get_clone_url(self):
-        return
+        raise NotImplementedError("Don't call me, I am abstract")
 
 
 class GitRepo(Repo):

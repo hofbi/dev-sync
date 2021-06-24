@@ -15,6 +15,18 @@ class TargetTest(unittest.TestCase):
         with self.assertRaises(FileNotFoundError):
             Target("blub")
 
+    def test_is_relative_to__other_not_relative__should_be_false(self):
+        unit = Target("/tmp")
+        self.assertFalse(unit.is_relative_to("/etc"))
+
+    def test_is_relative_to__other_relative__should_be_true(self):
+        unit = Target("/tmp")
+        self.assertTrue(unit.is_relative_to("/tmp/"))
+
+    def test_is_relative_to__other_same__should_be_true(self):
+        unit = Target("/tmp")
+        self.assertTrue(unit.is_relative_to("/tmp"))
+
 
 class SaveDataTest(unittest.TestCase):
     def test_constructor(self):
@@ -34,14 +46,6 @@ class RepoTest(unittest.TestCase):
     def test_constructor(self):
         repo = Repo("/tmp")
         self.assertEqual("/tmp", repo.path)
-
-    def test_is_update_required_yes(self):
-        repo = Repo("")
-        self.assertTrue(repo.is_update_required(-1))
-
-    def test_is_update_required_no(self):
-        repo = Repo("")
-        self.assertFalse(repo.is_update_required(1))
 
     def test_get_repo_target_path_correct(self):
         repo = Repo("/foo/blub")

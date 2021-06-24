@@ -1,5 +1,6 @@
 import copy
 import subprocess
+from pathlib import Path
 
 from devsync.log import logger
 from devsync.config import LOGFILE
@@ -7,14 +8,22 @@ from devsync.config import LOGFILE
 
 def run_backup(parser, target, last_update, report):
     home = parser.parse_home()
-    backup_folders = parser.parse_backup_folder()
 
+    if target.is_relative_to(home) and target.path != home:
+        logger.error("Should not update when target is part within the same path")
+        return
+
+    backup_folders = parser.parse_backup_folder()
     for backup_folder in backup_folders:
         backup_folder.find_repos_in_path()
 
     logger.info("Updating Repos...\n")
     repo_sync = RepoSync(home, backup_folders)
     repo_sync.update_repos(target, last_update, report)
+
+    if target.path == home:
+        logger.info("Root and target are identical. Updated only the local repos")
+        return
 
     logger.info("Sync data with rsync...\n")
     rsync = RSync(home, backup_folders)

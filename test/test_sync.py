@@ -1,6 +1,6 @@
 import unittest
-
 from unittest.mock import patch, MagicMock
+
 from devsync.data import BackupFolder, Target
 from devsync.sync import RSync, RepoSync
 
@@ -53,6 +53,6 @@ class RSyncTest(unittest.TestCase):
 
 
 class RepoSyncTest(unittest.TestCase):
-    def get_all_repos_no_repos_set_empty(self):
+    def test_get_all_repos_no_repos_set_empty(self):
         repo_sync = RepoSync("", [])
         self.assertFalse(repo_sync.get_all_repos())
