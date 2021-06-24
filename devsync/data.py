@@ -173,7 +173,7 @@ class BackupFolder:
     def has_repos(self) -> bool:
         return bool(self.repos)
 
-    def get_relative_repo_paths(self) -> List[str]:
+    def get_relative_repo_paths(self) -> List[Path]:
         return [repo.path.relative_to(self.path) for repo in self.repos]
 
     def find_repos_in_path(self) -> None:

@@ -3,25 +3,27 @@ import subprocess
 
 from devsync.log import logger
 from devsync.config import LOGFILE
+from devsync.parser import YMLConfigParser
+from devsync.data import Target
 
 
-def run_backup(parser, target, last_update, report):
-    home = str(parser.parse_home())
-
-    if target.is_relative_to(home) and target.path != home:
-        logger.error("Should not update when target is part within the same path")
-        return
+def run_backup(parser: YMLConfigParser, target: Target, last_update: int, report: bool):
+    home = parser.parse_home()
 
     backup_folders = parser.parse_backup_folder()
     for backup_folder in backup_folders:
         backup_folder.find_repos_in_path()
+
+    if target.is_relative_to(home):
+        logger.notice("Target is relative to root. Updating local repos only.")
+        target = Target(home)
 
     logger.info("Updating Repos...\n")
     repo_sync = RepoSync(home, backup_folders)
     repo_sync.update_repos(target, last_update, report)
 
     if target.path == home:
-        logger.info("Root and target are identical. Updated only the local repos")
+        logger.info("Target is relative to root. Updated only the local repos")
         return
 
     logger.info("Sync data with rsync...\n")
