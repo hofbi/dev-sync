@@ -1,27 +1,30 @@
 import argparse
 import datetime
+from pathlib import Path
 
+from devsync import args
 from devsync.log import logger
+from devsync.data import Target
 from devsync.parser import YMLConfigParser
 from devsync.sync import run_backup
-from devsync.config import NAME, VERSION, SCRIPT_DIR, SHORT_DEST
+from devsync.config import NAME, VERSION, SCRIPT_DIR
 
 
 def main():
     logger.success(f"{NAME} {VERSION}\n")
 
-    # Parsing Arguments
     args = parse_arguments()
-    config = args.config.name
-    backup_target = YMLConfigParser.get_target_from_argument(SHORT_DEST, args.target)
-    report = args.dry_run
-    last_update = args.last_update
+    config = Path(args.config.name)
+    backup_target = Target(args.target)
 
-    print_selected_config(config)
+    logger.verbose(
+        f'Use config from: {config.replace(SCRIPT_DIR + "/", "")}\n\n'
+        f"{config.read_text()}"
+    )
 
     logger.notice(f"Starting Backup for {backup_target.path}\n")
     yaml_parser = YMLConfigParser(config)
-    run_backup(yaml_parser, backup_target, last_update, report)
+    run_backup(yaml_parser, backup_target, args.last_update, args.dry_run)
 
     logger.success("Finished Backup\n")
 
@@ -43,14 +46,11 @@ def parse_arguments():
     )
     parser.add_argument(
         "target",
-        metavar="DESTINATION",
-        type=str,
-        help="Destination path where backup should be stored --> Also accepts destination shortcuts "
-        "defined in " + str(SHORT_DEST).replace(SCRIPT_DIR + "/", ""),
+        type=args.dir_path,
+        help="Destination path the where backup should be stored",
     )
     parser.add_argument(
         "config",
-        metavar="CONFIG_FILE",
         type=argparse.FileType("r"),
         help="Path to config file",
     )
@@ -67,20 +67,10 @@ def parse_arguments():
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        default=False,
         help="Perform a dry run without making real changes",
     )
 
     return parser.parse_args()
-
-
-def print_selected_config(config_path):
-    with open(config_path, "r") as fin:
-        logger.verbose(
-            "Use config from: {}\n\n{}".format(
-                config_path.replace(SCRIPT_DIR + "/", ""), fin.read()
-            )
-        )
 
 
 if __name__ == "__main__":

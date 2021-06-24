@@ -1,5 +1,4 @@
 from pyfakefs.fake_filesystem_unittest import TestCase
-from unittest.mock import patch, MagicMock
 
 from pathlib import Path
 

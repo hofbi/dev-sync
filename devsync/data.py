@@ -24,7 +24,7 @@ class Target:
     def is_relative_to(self, other):
         try:
             Path(self.path).relative_to(other)
-        except:
+        except Exception:
             return False
         return True
 

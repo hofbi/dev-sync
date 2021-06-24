@@ -4,7 +4,7 @@
 [![Actions Status](https://github.com/hofbi/dev-sync/workflows/CodeQL/badge.svg)](https://github.com/hofbi/dev-sync)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-This is my python backup tool based on [rsync](https://rsync.samba.org/) including backups for all my repositories ([Git](https://git-scm.com/) and [Mercurial](https://www.mercurial-scm.org/))
+This is a python backup tool based on [rsync](https://rsync.samba.org/) including backups for repositories based on ([Git](https://git-scm.com/) and [Mercurial](https://www.mercurial-scm.org/)).
 
 ## Usage
 
@@ -43,14 +43,4 @@ backupFolder:                       # Folders that should be saved (relative to 
   - path: Pictures                  # Folder name
   - path: Documents
   - path: Development
-```
-
-For often used backup destinations there is also a `shortdest.yml` which contains shortcuts for these paths. This shortcut name can also be passed as argument for `DESTINATION`.
-
-```shell
-shortDests:                         # Destination Shortcuts
-  - shortDest: TEST                 # Destination name (selectable by CLI argument)
-    destPath: /tmp/                 # Root path of destination
-  - shortDest: USB
-    destPath: /media/user/usbdevice
 ```

@@ -1,6 +1,5 @@
 import copy
 import subprocess
-from pathlib import Path
 
 from devsync.log import logger
 from devsync.config import LOGFILE
