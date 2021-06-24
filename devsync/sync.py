@@ -1,10 +1,12 @@
 import copy
 import subprocess
+from pathlib import Path
+from typing import List
 
 from devsync.log import logger
 from devsync.config import LOGFILE
 from devsync.parser import YMLConfigParser
-from devsync.data import Target
+from devsync.data import BackupFolder, Target
 
 
 def run_backup(parser: YMLConfigParser, target: Target, last_update: int, report: bool):
@@ -44,12 +46,12 @@ class RSync:
         "--log-file={}".format(LOGFILE),  # Log to LOGFILE
     ]
 
-    def __init__(self, root, backup_folders):
+    def __init__(self, root: Path, backup_folders: List[BackupFolder]):
         self.__root = root
         self.__backup_folders = backup_folders
 
     @staticmethod
-    def get_options(report, excludes):
+    def get_options(report: bool, excludes: List[Path]) -> str:
         options = copy.deepcopy(RSync.OPTIONS)
         if report:
             options.append("-n")  # Rsync Dry Run
@@ -58,7 +60,7 @@ class RSync:
 
         return " ".join(options)
 
-    def sync(self, target, report):
+    def sync(self, target: Target, report: bool) -> None:
         for element in self.__backup_folders:
             excludes = element.get_relative_repo_paths()
             options = self.get_options(report, excludes)
@@ -76,7 +78,7 @@ class RSync:
 
 
 class RepoSync:
-    def __init__(self, root, backup_folders):
+    def __init__(self, root: Path, backup_folders: List[BackupFolder]):
         self.__root = root
         self.__backup_folders = backup_folders
 

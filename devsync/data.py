@@ -159,7 +159,7 @@ class HgRepo(Repo):
 class BackupFolder:
     def __init__(self, root: Path, path: str):
         self.__path = root / path
-        self.__repos = []
+        self.__repos: List[Repo] = []
 
     @property
     def repos(self) -> List[Repo]:
