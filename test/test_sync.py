@@ -1,6 +1,8 @@
 import unittest
 from unittest.mock import patch, MagicMock
 
+from pathlib import Path
+
 from devsync.data import BackupFolder, Target
 from devsync.sync import RSync, RepoSync
 
@@ -25,7 +27,7 @@ class RSyncTest(unittest.TestCase):
 
     @patch("devsync.sync.subprocess")
     def test_sync_no_excludes(self, mock_subprocess):
-        backup_folder = BackupFolder("/foo", "blub")
+        backup_folder = BackupFolder(Path("/foo"), "blub")
         backup_folder.get_relative_repo_paths = MagicMock(return_value=[])
         rsync = RSync("/foo", [backup_folder])
         rsync.sync(Target("/tmp"), False)
@@ -39,7 +41,7 @@ class RSyncTest(unittest.TestCase):
 
     @patch("devsync.sync.subprocess")
     def test_sync_three_backup_folders(self, mock_subprocess):
-        backup_folder = BackupFolder("/foo", "blub")
+        backup_folder = BackupFolder(Path("/foo"), "blub")
         backup_folder.get_relative_repo_paths = MagicMock(return_value=[])
         rsync = RSync("/foo", [backup_folder, backup_folder, backup_folder])
         rsync.sync(Target("/tmp"), False)

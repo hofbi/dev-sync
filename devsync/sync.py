@@ -6,7 +6,7 @@ from devsync.config import LOGFILE
 
 
 def run_backup(parser, target, last_update, report):
-    home = parser.parse_home()
+    home = str(parser.parse_home())
 
     if target.is_relative_to(home) and target.path != home:
         logger.error("Should not update when target is part within the same path")
@@ -61,16 +61,10 @@ class RSync:
             excludes = element.get_relative_repo_paths()
             options = self.get_options(report, excludes)
 
-            logger.verbose(str(len(excludes)) + " Repos to exclude in " + element.path)
+            logger.verbose(f"{len(excludes)} Repos to exclude in {element.path}")
             logger.debug(
-                "Running Rsync"
-                + "\n\tSource: "
-                + element.path
-                + "\n\tTarget: "
-                + target.path
-                + "\n\tOptions: "
-                + options
-                + "\n"
+                f"Running Rsync\n\tSource: {element.path}\n\tTarget: {target.path}\n"
+                f"\tOptions: {options}\n"
             )
             subprocess.check_call(
                 "rsync {} {} {}".format(options, element.path, target.path),

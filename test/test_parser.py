@@ -30,7 +30,7 @@ class YMLConfigParserTest(TestCase):
 
     def test_parse_home_correct(self):
         parser = YMLConfigParser(self.config)
-        self.assertEqual("/home/user", parser.parse_home())
+        self.assertEqual(Path("/home/user"), parser.parse_home())
 
     def test_parse_backup_folder_correct(self):
         parser = YMLConfigParser(self.config)

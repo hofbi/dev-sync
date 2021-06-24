@@ -14,7 +14,7 @@ test:
 	python3 -m unittest
 
 coverage:
-	coverage run --source='devsync' python3 -m unittest
+	coverage run --source='devsync' -m unittest
 	coverage report
 
 html_coverage: coverage

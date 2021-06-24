@@ -4,66 +4,9 @@ import git
 import datetime
 import subprocess
 from pathlib import Path
+from typing import List
 
 from devsync.log import logger
-
-
-class Target:
-    def __init__(self, destination_path):
-        self.__path = str(Path(destination_path).absolute())
-        self.check_destination()
-
-    @property
-    def path(self):
-        return self.__path
-
-    def check_destination(self):
-        if not Path(self.path).exists():
-            raise FileNotFoundError("Target dir {} does not exist".format(self.path))
-
-    def is_relative_to(self, other):
-        try:
-            Path(self.path).relative_to(other)
-        except Exception:
-            return False
-        return True
-
-
-class BackupFolder:
-    def __init__(self, root, path):
-        self.__path = os.path.join(root, path)
-        self.__repos = []
-
-    @property
-    def repos(self):
-        return self.__repos
-
-    @property
-    def path(self):
-        return self.__path
-
-    @property
-    def has_repos(self):
-        return bool(self.repos)
-
-    def get_relative_repo_paths(self):
-        return [repo.path.replace(self.path + "/", "") for repo in self.repos]
-
-    def find_repos_in_path(self):
-        repos = []
-
-        for root, dirs, files in os.walk(self.path, topdown=True):
-            dirs.sort()
-            if ".git" in dirs:
-                repos.append(GitRepo(root))
-                dirs[:] = []
-            elif ".hg" in dirs:
-                repos.append(HgRepo(root))
-                dirs[:] = []
-            elif ".svn" in dirs:
-                dirs[:] = []
-
-        self.__repos = repos
 
 
 class Repo:
@@ -195,3 +138,57 @@ class HgRepo(Repo):
     @staticmethod
     def parse_remote(item):
         return item[len("default = ") :].lstrip()  # noqa E203 (conflicts with black)
+
+
+class Target:
+    def __init__(self, destination_path):
+        self.__path = str(Path(destination_path).absolute())
+        self.check_destination()
+
+    @property
+    def path(self):
+        return self.__path
+
+    def check_destination(self):
+        if not Path(self.path).exists():
+            raise FileNotFoundError("Target dir {} does not exist".format(self.path))
+
+    def is_relative_to(self, other):
+        try:
+            Path(self.path).relative_to(other)
+        except Exception:
+            return False
+        return True
+
+
+class BackupFolder:
+    def __init__(self, root: Path, path: str):
+        self.__path = root / path
+        self.__repos = []
+
+    @property
+    def repos(self) -> List[Repo]:
+        return self.__repos
+
+    @property
+    def path(self) -> Path:
+        return self.__path
+
+    @property
+    def has_repos(self) -> bool:
+        return bool(self.repos)
+
+    def get_relative_repo_paths(self) -> List[str]:
+        return [repo.path.replace(str(self.path) + "/", "") for repo in self.repos]
+
+    def find_repos_in_path(self) -> None:
+        for root, dirs, _ in os.walk(self.path, topdown=True):
+            dirs.sort()
+            if ".git" in dirs:
+                self.__repos.append(GitRepo(root))
+                dirs[:] = []
+            elif ".hg" in dirs:
+                self.__repos.append(HgRepo(root))
+                dirs[:] = []
+            elif ".svn" in dirs:
+                dirs[:] = []

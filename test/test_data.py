@@ -1,5 +1,8 @@
 import unittest
+from pyfakefs.fake_filesystem_unittest import TestCase
 import os
+
+from pathlib import Path
 
 from devsync.data import BackupFolder, HgRepo, Repo, GitRepo, Target
 
@@ -28,18 +31,35 @@ class TargetTest(unittest.TestCase):
         self.assertTrue(unit.is_relative_to("/tmp"))
 
 
-class SaveDataTest(unittest.TestCase):
+class SaveDataTest(TestCase):
+    def setUp(self) -> None:
+        self.setUpPyfakefs()
+
+    def create_git_repo_in_path(self, path: Path):
+        self.fs.create_dir(path / ".git")
+
     def test_constructor(self):
-        backup_folder = BackupFolder("/home/user", "test")
-        self.assertEqual("/home/user/test", backup_folder.path)
+        backup_folder = BackupFolder(Path("/home/user"), "test")
+        self.assertEqual(Path("/home/user/test"), backup_folder.path)
         self.assertFalse(backup_folder.repos)
         self.assertFalse(backup_folder.has_repos)
 
-    def test_get_relative_repo_paths_no_repos_correct(self):
-        backup_folder = BackupFolder("/home/user", "test")
+    def test_get_relative_repo_paths_no_repos_should_be_empty(self):
+        backup_folder = BackupFolder(Path("/home/user"), "test")
+        backup_folder.find_repos_in_path()
+
         repos = backup_folder.get_relative_repo_paths()
 
         self.assertFalse(repos)
+
+    def test_get_relative_repo_paths_one_repo_should_be_only_repo_folder_name(self):
+        self.create_git_repo_in_path(Path("/home/user/test/repo"))
+        backup_folder = BackupFolder(Path("/home/user"), "test")
+        backup_folder.find_repos_in_path()
+
+        repos = backup_folder.get_relative_repo_paths()
+
+        self.assertListEqual(["repo"], repos)
 
 
 class RepoTest(unittest.TestCase):
