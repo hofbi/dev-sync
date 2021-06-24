@@ -1,20 +1,23 @@
 import unittest
 from pyfakefs.fake_filesystem_unittest import TestCase
-import os
 
 from pathlib import Path
 
 from devsync.data import BackupFolder, HgRepo, Repo, GitRepo, Target
 
 
-class TargetTest(unittest.TestCase):
+class TargetTest(TestCase):
+    def setUp(self) -> None:
+        self.setUpPyfakefs()
+
     def test_constructor_absolute_destination_path(self):
-        self.assertEqual("/tmp", Target("/tmp").path)
+        self.assertEqual(Path("/tmp"), Target("/tmp").path)
 
     def test_constructor_relative_destination_path(self):
-        self.assertEqual(os.path.abspath("config"), Target("config").path)
+        self.fs.create_file("config")
+        self.assertEqual(Path("/config"), Target("config").path)
 
-    def test_constructor_not_existing_destination_path(self):
+    def test_constructor_not_existing_destination_path_should_raise(self):
         with self.assertRaises(FileNotFoundError):
             Target("blub")
 

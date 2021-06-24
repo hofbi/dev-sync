@@ -141,19 +141,19 @@ class HgRepo(Repo):
 
 
 class Target:
-    def __init__(self, destination_path):
-        self.__path = str(Path(destination_path).absolute())
+    def __init__(self, destination_path: Path):
+        self.__path = Path(destination_path).absolute()
         self.check_destination()
 
     @property
-    def path(self):
+    def path(self) -> Path:
         return self.__path
 
-    def check_destination(self):
+    def check_destination(self) -> None:
         if not Path(self.path).exists():
-            raise FileNotFoundError("Target dir {} does not exist".format(self.path))
+            raise FileNotFoundError(f"Target dir {self.path} does not exist")
 
-    def is_relative_to(self, other):
+    def is_relative_to(self, other) -> bool:
         try:
             Path(self.path).relative_to(other)
         except Exception:
