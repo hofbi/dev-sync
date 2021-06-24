@@ -142,7 +142,9 @@ class GitRepo(Repo):
         git.Repo.clone_from(url, target_path, progress=CloneProgress())
 
     def pull_repo(self, target_path):
-        subprocess.check_call("git pull", shell=True, cwd=target_path)
+        subprocess.check_call(
+            "git fetch && git reset --hard HEAD", shell=True, cwd=target_path
+        )
 
     @property
     def repo_type(self):
