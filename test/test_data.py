@@ -85,6 +85,38 @@ class BackupFolderTest(TestCase):
 
 
 class RepoTest(TestCase):
+    class TestRepo(Repo):
+        def __init__(self, path: str, last_update=0):
+            super().__init__(path)
+            self.__last_update = last_update
+            self.pull_called = False
+            self.clone_called = False
+
+        @property
+        def repo_type(self) -> str:
+            return "Test"
+
+        @property
+        def get_latest_commit_time(self):
+            return self.__last_update
+
+        def pull_repo(self, target_path: Path):
+            self.pull_called = True
+
+        def clone_repo(self, url: str, target_path: Path):
+            self.clone_called = True
+
+        def get_clone_url(self):
+            return ""
+
+    def __create_target(self, root: Path, path: Path) -> Target:
+        self.fs.create_dir(path)
+        return Target(root)
+
+    def __create_target_root_only(self, path: Path) -> Target:
+        self.fs.create_dir(path)
+        return Target(path)
+
     def setUp(self) -> None:
         self.setUpPyfakefs()
 
@@ -97,6 +129,50 @@ class RepoTest(TestCase):
         self.assertEqual(
             Path("/tmp/blub"), repo.get_repo_target_path("/foo/", Target("/tmp"))
         )
+
+    def test_is_update_required_when_last_update_before_last_commit_should_be_true(
+        self,
+    ):
+        unit = self.TestRepo("", last_update=0)
+        self.assertTrue(unit.is_update_required(-1))
+
+    def test_is_update_required_when_last_update_after_last_commit_should_be_false(
+        self,
+    ):
+        unit = self.TestRepo("", last_update=0)
+        self.assertFalse(unit.is_update_required(1))
+
+    def test_update_repo_on_target_when_exists_should_have_called_pull(self):
+        target = self.__create_target(Path("/foo"), Path("/foo/repo"))
+        unit = self.TestRepo("/bar/repo")
+
+        unit.update_repo_on_target(Path("/bar"), target, False)
+        self.assertTrue(unit.pull_called)
+
+    def test_update_repo_on_target_when_exists_and_repo_should_not_have_called_pull(
+        self,
+    ):
+        target = self.__create_target(Path("/foo"), Path("/foo/repo"))
+        unit = self.TestRepo("/bar/repo")
+
+        unit.update_repo_on_target(Path("/bar"), target, True)
+        self.assertFalse(unit.pull_called)
+
+    def test_update_repo_on_target_when_not_exists_should_have_called_clone(self):
+        target = self.__create_target_root_only(Path("/foo"))
+        unit = self.TestRepo("/bar/repo")
+
+        unit.update_repo_on_target(Path("/bar"), target, False)
+        self.assertTrue(unit.clone_called)
+
+    def test_update_repo_on_target_when_not_exists_and_report_should_not_have_called_clone(
+        self,
+    ):
+        target = self.__create_target_root_only(Path("/foo"))
+        unit = self.TestRepo("/bar/repo")
+
+        unit.update_repo_on_target(Path("/bar"), target, True)
+        self.assertFalse(unit.clone_called)
 
 
 class HgRepoTest(TestCase):

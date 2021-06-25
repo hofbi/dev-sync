@@ -6,7 +6,7 @@ from typing import List
 from devsync.log import logger
 from devsync.config import LOGFILE
 from devsync.parser import YMLConfigParser
-from devsync.data import BackupFolder, Target
+from devsync.data import BackupFolder, Target, Repo
 
 
 def run_backup(parser: YMLConfigParser, target: Target, last_update: int, report: bool):
@@ -82,7 +82,7 @@ class RepoSync:
         self.__root = root
         self.__backup_folders = backup_folders
 
-    def update_repos(self, target, last_update, report):
+    def update_repos(self, target: Target, last_update: int, report: bool):
         all_repos = self.get_all_repos()
         logger.verbose(f"{len(all_repos)} repos found in all paths")
 
@@ -92,7 +92,7 @@ class RepoSync:
         for repo in all_repos:
             repo.update_repo_on_target(self.__root, target, report)
 
-    def get_all_repos(self):
+    def get_all_repos(self) -> List[Repo]:
         all_repos = []
         for element in self.__backup_folders:
             repos = element.repos

@@ -50,7 +50,7 @@ class Repo:
     def get_repo_target_path(self, root, target: Target) -> Path:
         return target.path / self.path.relative_to(root)
 
-    def update_repo_on_target(self, root, target, report):
+    def update_repo_on_target(self, root: Path, target: Target, report: bool):
         self.print_update_report()
         target_path = self.get_repo_target_path(root, target)
         if target_path.exists():
@@ -72,37 +72,37 @@ class Repo:
 
     @property
     @abc.abstractmethod
-    def get_latest_commit_time(self):
+    def get_latest_commit_time(self) -> float:
         raise NotImplementedError("Don't call me, I am abstract")
 
     @abc.abstractmethod
-    def pull_repo(self, target_path: Path):
+    def pull_repo(self, target_path: Path) -> None:
         raise NotImplementedError("Don't call me, I am abstract")
 
     @abc.abstractmethod
-    def clone_repo(self, url: str, target_path: Path):
+    def clone_repo(self, url: str, target_path: Path) -> None:
         raise NotImplementedError("Don't call me, I am abstract")
 
     @abc.abstractmethod
-    def get_clone_url(self):
+    def get_clone_url(self) -> str:
         raise NotImplementedError("Don't call me, I am abstract")
 
 
 class GitRepo(Repo):
-    def get_clone_url(self):
+    def get_clone_url(self) -> str:
         output = subprocess.check_output(
             "git remote get-url origin", shell=True, cwd=self.path
         )
         return output.decode("utf-8").split("\n")[0]
 
-    def clone_repo(self, url: str, target_path: Path):
+    def clone_repo(self, url: str, target_path: Path) -> None:
         class CloneProgress(git.RemoteProgress):
             def line_dropped(self, line):
                 print(line)
 
         git.Repo.clone_from(url, target_path, progress=CloneProgress())
 
-    def pull_repo(self, target_path: Path):
+    def pull_repo(self, target_path: Path) -> None:
         subprocess.check_call(
             "git fetch && git reset --hard HEAD", shell=True, cwd=target_path
         )
@@ -112,25 +112,26 @@ class GitRepo(Repo):
         return "Git"
 
     @property
-    def get_latest_commit_time(self):
+    def get_latest_commit_time(self) -> float:
         git_repo = git.Repo(self.path)
         heads_commit_time = [head.commit.committed_date for head in git_repo.heads]
         return max(heads_commit_time)
 
 
 class HgRepo(Repo):
-    def get_clone_url(self):
+    def get_clone_url(self) -> str:
         output = subprocess.check_output("hg paths", shell=True, cwd=self.path)
         for item in output.decode("utf-8").split("\n"):
             if "default" in item:
                 return self.parse_remote(item)
+        return ""
 
-    def clone_repo(self, url: str, target_path: Path):
+    def clone_repo(self, url: str, target_path: Path) -> None:
         subprocess.check_call(
             "hg clone " + url, shell=True, cwd=target_path.parent.absolute()
         )
 
-    def pull_repo(self, target_path: Path):
+    def pull_repo(self, target_path: Path) -> None:
         subprocess.check_call("hg pull && hg up", shell=True, cwd=target_path)
 
     @property
@@ -138,7 +139,7 @@ class HgRepo(Repo):
         return "Hg"
 
     @property
-    def get_latest_commit_time(self):
+    def get_latest_commit_time(self) -> float:
         output = subprocess.check_output("hg heads", shell=True, cwd=self.path)
         for item in output.decode("utf-8").split("\n"):
             if "date:" in item:
@@ -146,13 +147,13 @@ class HgRepo(Repo):
         return 0
 
     @staticmethod
-    def parse_date(item):
+    def parse_date(item: str) -> float:
         date_str = item[5:].lstrip()
         date = datetime.datetime.strptime(date_str, "%a %b %d %H:%M:%S %Y %z")
         return date.timestamp()
 
     @staticmethod
-    def parse_remote(item):
+    def parse_remote(item: str):
         return item[len("default = ") :].lstrip()
 
 
