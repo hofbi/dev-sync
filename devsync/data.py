@@ -1,6 +1,7 @@
 import os
 import abc
 import git
+import re
 import datetime
 import subprocess
 from pathlib import Path
@@ -39,31 +40,31 @@ class Repo:
         return self.__path
 
     def is_update_required(self, last_update) -> bool:
-        return self.get_latest_commit_time > last_update
+        return self._get_latest_commit_time > last_update
 
-    def print_update_report(self) -> None:
+    def __print_update_report(self) -> None:
         logger.debug(
             f"Updating {self.repo_type} Repo {self.path} --> Last Commit "
-            f"{datetime.datetime.utcfromtimestamp(self.get_latest_commit_time)}"
+            f"{datetime.datetime.utcfromtimestamp(self._get_latest_commit_time)}"
         )
 
     def get_repo_target_path(self, root, target: Target) -> Path:
         return target.path / self.path.relative_to(root)
 
     def update_repo_on_target(self, root: Path, target: Target, report: bool):
-        self.print_update_report()
+        self.__print_update_report()
         target_path = self.get_repo_target_path(root, target)
         if target_path.exists():
             logger.debug(f"\tFound on target {target_path} --> pull\n")
             if not report:
-                self.pull_repo(target_path)
+                self._pull_repo(target_path)
         else:
-            url = self.get_clone_url()
+            url = self._get_clone_url()
             logger.debug(
                 f"\tNot Found on target --> clone from {url} into {target_path}\n"
             )
             if not report:
-                self.clone_repo(url, target_path)
+                self._clone_repo(url, target_path)
 
     @property
     @abc.abstractmethod
@@ -72,39 +73,42 @@ class Repo:
 
     @property
     @abc.abstractmethod
-    def get_latest_commit_time(self) -> float:
+    def _get_latest_commit_time(self) -> float:
         raise NotImplementedError("Don't call me, I am abstract")
 
     @abc.abstractmethod
-    def pull_repo(self, target_path: Path) -> None:
+    def _pull_repo(self, target_path: Path) -> None:
         raise NotImplementedError("Don't call me, I am abstract")
 
     @abc.abstractmethod
-    def clone_repo(self, url: str, target_path: Path) -> None:
+    def _clone_repo(self, url: str, target_path: Path) -> None:
         raise NotImplementedError("Don't call me, I am abstract")
 
     @abc.abstractmethod
-    def get_clone_url(self) -> str:
+    def _get_clone_url(self) -> str:
         raise NotImplementedError("Don't call me, I am abstract")
 
 
 class GitRepo(Repo):
-    def get_clone_url(self) -> str:
+    def _get_clone_url(self) -> str:
         output = subprocess.check_output(
             "git remote get-url origin", shell=True, cwd=self.path
         )
         return output.decode("utf-8").split("\n")[0]
 
-    def clone_repo(self, url: str, target_path: Path) -> None:
+    def _clone_repo(self, url: str, target_path: Path) -> None:
         class CloneProgress(git.RemoteProgress):
             def line_dropped(self, line):
                 print(line)
 
         git.Repo.clone_from(url, target_path, progress=CloneProgress())
 
-    def pull_repo(self, target_path: Path) -> None:
+    def _pull_repo(self, target_path: Path) -> None:
+        main_branch = GitRepo.get_default_branch(target_path)
         subprocess.check_call(
-            "git fetch && git reset --hard HEAD", shell=True, cwd=target_path
+            f"git fetch && git reset --hard origin {main_branch}",
+            shell=True,
+            cwd=target_path,
         )
 
     @property
@@ -112,26 +116,38 @@ class GitRepo(Repo):
         return "Git"
 
     @property
-    def get_latest_commit_time(self) -> float:
+    def _get_latest_commit_time(self) -> float:
         git_repo = git.Repo(self.path)
         heads_commit_time = [head.commit.committed_date for head in git_repo.heads]
         return max(heads_commit_time)
 
+    @staticmethod
+    def get_default_branch(target_path: Path) -> str:
+        try:
+            origin_info = subprocess.check_output(
+                "git remote show origin", shell=True, cwd=target_path
+            ).decode("utf-8")
+        except subprocess.CalledProcessError:
+            return "master"
+        default_branch_pattern = r"HEAD branch:\s(\w*)"
+        default_branch = re.search(default_branch_pattern, origin_info, re.DOTALL)
+        return default_branch.group(1) if default_branch else "master"
+
 
 class HgRepo(Repo):
-    def get_clone_url(self) -> str:
+    def _get_clone_url(self) -> str:
         output = subprocess.check_output("hg paths", shell=True, cwd=self.path)
         for item in output.decode("utf-8").split("\n"):
             if "default" in item:
                 return self.parse_remote(item)
         return ""
 
-    def clone_repo(self, url: str, target_path: Path) -> None:
+    def _clone_repo(self, url: str, target_path: Path) -> None:
         subprocess.check_call(
             "hg clone " + url, shell=True, cwd=target_path.parent.absolute()
         )
 
-    def pull_repo(self, target_path: Path) -> None:
+    def _pull_repo(self, target_path: Path) -> None:
         subprocess.check_call("hg pull && hg up", shell=True, cwd=target_path)
 
     @property
@@ -139,7 +155,7 @@ class HgRepo(Repo):
         return "Hg"
 
     @property
-    def get_latest_commit_time(self) -> float:
+    def _get_latest_commit_time(self) -> float:
         output = subprocess.check_output("hg heads", shell=True, cwd=self.path)
         for item in output.decode("utf-8").split("\n"):
             if "date:" in item:

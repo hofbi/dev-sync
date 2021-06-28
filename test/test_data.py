@@ -1,6 +1,9 @@
+from typing import ByteString
 from pyfakefs.fake_filesystem_unittest import TestCase
+from unittest.mock import patch, MagicMock
 
 from pathlib import Path
+from subprocess import CalledProcessError
 
 from devsync.data import BackupFolder, HgRepo, Repo, GitRepo, Target
 
@@ -97,16 +100,16 @@ class RepoTest(TestCase):
             return "Test"
 
         @property
-        def get_latest_commit_time(self):
+        def _get_latest_commit_time(self):
             return self.__last_update
 
-        def pull_repo(self, target_path: Path):
+        def _pull_repo(self, target_path: Path):
             self.pull_called = True
 
-        def clone_repo(self, url: str, target_path: Path):
+        def _clone_repo(self, url: str, target_path: Path):
             self.clone_called = True
 
-        def get_clone_url(self):
+        def _get_clone_url(self):
             return ""
 
     def __create_target(self, root: Path, path: Path) -> Target:
@@ -197,9 +200,42 @@ class HgRepoTest(TestCase):
 
 
 class GitRepoTest(TestCase):
+    @staticmethod
+    def create_test_output(default_branch: str) -> ByteString:
+        test_output = (
+            "  Fetch URL: https://github.com/foo/bar.git\n"
+            "  Push  URL: https://github.com/foo/bar.git\n"
+            f"  HEAD branch: {default_branch}\n"
+            "  Remote branch:\n"
+            "    master tracked\n"
+        )
+        return test_output.encode("utf-8")
+
     def setUp(self) -> None:
         self.setUpPyfakefs()
 
     def test_get_repo_type_git(self):
         repo = GitRepo("")
         self.assertEqual("Git", repo.repo_type)
+
+    def test_get_default_branch_with_master_should_return_master(self):
+        with patch(
+            "subprocess.check_output",
+            MagicMock(return_value=GitRepoTest.create_test_output("master")),
+        ):
+            self.assertEqual("master", GitRepo.get_default_branch(Path()))
+
+    def test_get_default_branch_with_main_should_return_main(self):
+        with patch(
+            "subprocess.check_output",
+            MagicMock(return_value=GitRepoTest.create_test_output("main")),
+        ):
+            self.assertEqual("main", GitRepo.get_default_branch(Path()))
+
+    @patch("subprocess.check_output", MagicMock(side_effect=CalledProcessError(2, "")))
+    def test_get_default_branch_with_exception_should_return_master(self):
+        self.assertEqual("master", GitRepo.get_default_branch(Path()))
+
+    @patch("subprocess.check_output", MagicMock(return_value=b"foo bar"))
+    def test_get_default_branch_with_invalid_output_should_return_master(self):
+        self.assertEqual("master", GitRepo.get_default_branch(Path()))
