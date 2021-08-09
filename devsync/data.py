@@ -106,7 +106,7 @@ class GitRepo(Repo):
     def _pull_repo(self, target_path: Path) -> None:
         main_branch = GitRepo.get_default_branch(target_path)
         subprocess.check_call(
-            f"git fetch && git reset --hard origin {main_branch}",
+            f"git fetch && git reset --hard origin/{main_branch}",
             shell=True,
             cwd=target_path,
         )

@@ -7,23 +7,21 @@ from devsync.log import logger
 from devsync.data import Target
 from devsync.parser import YMLConfigParser
 from devsync.sync import run_backup
-from devsync.config import NAME, VERSION, SCRIPT_DIR
+from devsync.config import NAME, VERSION
 
 
 def main():
     logger.success(f"{NAME} {VERSION}\n")
 
-    args = parse_arguments()
-    config = Path(args.config.name)
-    backup_target = Target(args.target)
+    arguments = parse_arguments()
+    config = Path(arguments.config.name)
+    backup_target = Target(arguments.target)
 
-    logger.verbose(
-        f"Use config from: {config.relative_to(SCRIPT_DIR)}\n\n{config.read_text()}"
-    )
+    logger.verbose(f"Use config from: {config}\n\n{config.read_text()}")
 
     logger.notice(f"Starting Backup for {backup_target.path}\n")
     yaml_parser = YMLConfigParser(config)
-    run_backup(yaml_parser, backup_target, args.last_update, args.dry_run)
+    run_backup(yaml_parser, backup_target, arguments.last_update, arguments.dry_run)
 
     logger.success("Finished Backup\n")
 
