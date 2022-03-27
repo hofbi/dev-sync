@@ -1,9 +1,8 @@
-from pyfakefs.fake_filesystem_unittest import TestCase
-
 from pathlib import Path
 
-from devsync.parser import YMLConfigParser
+from pyfakefs.fake_filesystem_unittest import TestCase
 
+from devsync.parser import YMLConfigParser
 
 CONFIG_CONTENT = """
 home: /home/user                    # Source root folder

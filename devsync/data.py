@@ -1,11 +1,12 @@
-import os
 import abc
-import git
-import re
 import datetime
+import os
+import re
 import subprocess
 from pathlib import Path
 from typing import List, Union
+
+import git
 
 from devsync.log import logger
 

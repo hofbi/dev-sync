@@ -3,6 +3,5 @@ coloredlogs
 PyYAML
 gitpython
 coverage
-black
-flake8
 pyfakefs
+pre-commit

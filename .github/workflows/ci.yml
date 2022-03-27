@@ -23,7 +23,7 @@ jobs:
     - name: Tests
       run: make test
     - name: Check
-      run: make check
+      run: pre-commit run -a
 
   super-lint:
     runs-on: ubuntu-latest

@@ -1,6 +1,7 @@
 """Test args module"""
 
 from pathlib import Path
+
 from pyfakefs.fake_filesystem_unittest import TestCase
 
 from devsync import args

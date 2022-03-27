@@ -1,11 +1,11 @@
-from typing import ByteString
-from pyfakefs.fake_filesystem_unittest import TestCase
-from unittest.mock import patch, MagicMock
-
 from pathlib import Path
 from subprocess import CalledProcessError
+from typing import ByteString
+from unittest.mock import MagicMock, patch
 
-from devsync.data import BackupFolder, HgRepo, Repo, GitRepo, Target
+from pyfakefs.fake_filesystem_unittest import TestCase
+
+from devsync.data import BackupFolder, GitRepo, HgRepo, Repo, Target
 
 
 class TargetTest(TestCase):

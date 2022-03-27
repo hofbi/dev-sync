@@ -1,9 +1,10 @@
 import logging
-import coloredlogs
+from logging.handlers import TimedRotatingFileHandler
 from pathlib import Path
 
+import coloredlogs
 from verboselogs import VerboseLogger
-from logging.handlers import TimedRotatingFileHandler
+
 from devsync.config import LOGFILE, NAME
 
 

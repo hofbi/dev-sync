@@ -3,10 +3,10 @@ import subprocess
 from pathlib import Path
 from typing import List
 
-from devsync.log import logger
 from devsync.config import LOGFILE
+from devsync.data import BackupFolder, Repo, Target
+from devsync.log import logger
 from devsync.parser import YMLConfigParser
-from devsync.data import BackupFolder, Target, Repo
 
 
 def run_backup(parser: YMLConfigParser, target: Target, last_update: int, report: bool):
@@ -43,7 +43,7 @@ class RSync:
         "--progress",  # Show Progress
         "--modify-window=2",  # Allowing times to differ by up to 2 seconds. Related to FAT 2 second
         # resolution for timestamps
-        "--log-file={}".format(LOGFILE),  # Log to LOGFILE
+        f"--log-file={LOGFILE}",  # Log to LOGFILE
     ]
 
     def __init__(self, root: Path, backup_folders: List[BackupFolder]):

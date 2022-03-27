@@ -3,11 +3,11 @@ import datetime
 from pathlib import Path
 
 from devsync import args
-from devsync.log import logger
+from devsync.config import NAME, VERSION
 from devsync.data import Target
+from devsync.log import logger
 from devsync.parser import YMLConfigParser
 from devsync.sync import run_backup
-from devsync.config import NAME, VERSION
 
 
 def main():

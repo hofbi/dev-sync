@@ -1,6 +1,7 @@
-import yaml
 from pathlib import Path
 from typing import List
+
+import yaml
 
 from devsync.data import BackupFolder
 

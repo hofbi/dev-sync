@@ -1,11 +1,11 @@
 import unittest
-from pyfakefs.fake_filesystem_unittest import TestCase
-from unittest.mock import patch, MagicMock
-
 from pathlib import Path
+from unittest.mock import MagicMock, patch
+
+from pyfakefs.fake_filesystem_unittest import TestCase
 
 from devsync.data import BackupFolder, Target
-from devsync.sync import RSync, RepoSync
+from devsync.sync import RepoSync, RSync
 
 
 class RSyncTest(TestCase):
