@@ -1,7 +1,7 @@
-verboselogs
 coloredlogs
-PyYAML
-gitpython
 coverage
-pyfakefs
+gitpython
 pre-commit
+pyfakefs
+PyYAML
+verboselogs

@@ -27,7 +27,7 @@ class Target:
     def is_relative_to(self, other) -> bool:
         try:
             Path(self.path).relative_to(other)
-        except Exception:
+        except ValueError:
             return False
         return True
 
@@ -95,7 +95,7 @@ class GitRepo(Repo):
         output = subprocess.check_output(
             "git remote get-url origin", shell=True, cwd=self.path
         )
-        return output.decode("utf-8").split("\n")[0]
+        return output.decode("utf-8").split("\n", maxsplit=1)[0]
 
     def _clone_repo(self, url: str, target_path: Path) -> None:
         class CloneProgress(git.RemoteProgress):

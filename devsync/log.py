@@ -16,9 +16,9 @@ def init_logging(logfile: Path) -> VerboseLogger:
     coloredlogs.install(level="DEBUG", milliseconds=True, logger=dev_sync_logger)
     dev_sync_logger.setLevel(logging.DEBUG)
 
-    fh = TimedRotatingFileHandler(logfile, when="MIDNIGHT")
-    fh.setFormatter(logging.Formatter(coloredlogs.DEFAULT_LOG_FORMAT))
-    dev_sync_logger.addHandler(fh)
+    file_handler = TimedRotatingFileHandler(logfile, when="MIDNIGHT")
+    file_handler.setFormatter(logging.Formatter(coloredlogs.DEFAULT_LOG_FORMAT))
+    dev_sync_logger.addHandler(file_handler)
 
     return dev_sync_logger
 

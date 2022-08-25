@@ -116,6 +116,7 @@ dmypy.json
 
 # IDE
 .idea
+.vscode
 
 # Logs
 logs

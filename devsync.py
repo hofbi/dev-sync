@@ -2,7 +2,7 @@ import argparse
 import datetime
 from pathlib import Path
 
-from devsync import args
+from devsync.args import dir_path
 from devsync.config import NAME, VERSION
 from devsync.data import Target
 from devsync.log import logger
@@ -30,9 +30,9 @@ def parse_arguments():
     class DateAction(argparse.Action):
         def __call__(self, arg_parser, args, values, option_string=None):
             last_update = datetime.datetime(
-                year=values[0],
-                month=values[1],
-                day=values[2],
+                year=int(values[0]),
+                month=int(values[1]),
+                day=int(values[2]),
                 tzinfo=datetime.timezone.utc,
             ).timestamp()
             setattr(args, self.dest, last_update)
@@ -43,7 +43,7 @@ def parse_arguments():
     )
     parser.add_argument(
         "target",
-        type=args.dir_path,
+        type=dir_path,
         help="Destination path the where backup should be stored",
     )
     parser.add_argument(

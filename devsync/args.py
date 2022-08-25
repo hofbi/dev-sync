@@ -9,5 +9,4 @@ def dir_path(path_string: str) -> Path:
     """
     if Path(path_string).is_dir():
         return Path(path_string)
-    else:
-        raise NotADirectoryError(path_string)
+    raise NotADirectoryError(path_string)
