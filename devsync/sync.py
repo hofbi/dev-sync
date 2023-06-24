@@ -1,7 +1,6 @@
 import copy
 import subprocess
 from pathlib import Path
-from typing import List
 
 from devsync.config import LOGFILE
 from devsync.data import BackupFolder, Repo, Target
@@ -46,12 +45,12 @@ class RSync:
         f"--log-file={LOGFILE}",  # Log to LOGFILE
     ]
 
-    def __init__(self, root: Path, backup_folders: List[BackupFolder]):
+    def __init__(self, root: Path, backup_folders: list[BackupFolder]):
         self.__root = root
         self.__backup_folders = backup_folders
 
     @staticmethod
-    def get_options(report: bool, excludes: List[Path]) -> str:
+    def get_options(report: bool, excludes: list[Path]) -> str:
         options = copy.deepcopy(RSync.OPTIONS)
         if report:
             options.append("-n")  # Rsync Dry Run
@@ -78,7 +77,7 @@ class RSync:
 
 
 class RepoSync:
-    def __init__(self, root: Path, backup_folders: List[BackupFolder]):
+    def __init__(self, root: Path, backup_folders: list[BackupFolder]):
         self.__root = root
         self.__backup_folders = backup_folders
 
@@ -92,7 +91,7 @@ class RepoSync:
         for repo in all_repos:
             repo.update_repo_on_target(self.__root, target, report)
 
-    def get_all_repos(self) -> List[Repo]:
+    def get_all_repos(self) -> list[Repo]:
         all_repos = []
         for element in self.__backup_folders:
             repos = element.repos

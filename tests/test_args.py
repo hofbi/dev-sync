@@ -1,4 +1,4 @@
-"""Test args module"""
+"""Test args module."""
 
 from pathlib import Path
 
@@ -8,7 +8,7 @@ from devsync.args import dir_path
 
 
 class ArgsTest(TestCase):
-    """Args test"""
+    """Args test."""
 
     def setUp(self) -> None:
         self.setUpPyfakefs()

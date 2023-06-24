@@ -2,25 +2,25 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-    - name: Install dependencies
-      run: |
-        sudo snap install shfmt
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Tests
-      run: make test
-    - name: Check
-      run: pre-commit run -a
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: |
+          sudo snap install shfmt
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Tests
+        run: make test
+      - name: Check
+        run: pre-commit run -a

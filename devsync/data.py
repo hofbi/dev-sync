@@ -4,7 +4,6 @@ import os
 import re
 import subprocess
 from pathlib import Path
-from typing import List, Union
 
 import git
 
@@ -12,7 +11,7 @@ from devsync.log import logger
 
 
 class Target:
-    def __init__(self, destination_path: Union[str, Path]):
+    def __init__(self, destination_path: str | Path):
         self.__path = Path(destination_path).absolute()
         self.check_destination()
 
@@ -22,7 +21,8 @@ class Target:
 
     def check_destination(self) -> None:
         if not Path(self.path).exists():
-            raise FileNotFoundError(f"Target dir {self.path} does not exist")
+            msg = f"Target dir {self.path} does not exist"
+            raise FileNotFoundError(msg)
 
     def is_relative_to(self, other) -> bool:
         try:
@@ -70,24 +70,29 @@ class Repo:
     @property
     @abc.abstractmethod
     def repo_type(self) -> str:
-        raise NotImplementedError("Don't call me, I am abstract")
+        msg = "Don't call me, I am abstract"
+        raise NotImplementedError(msg)
 
     @property
     @abc.abstractmethod
     def _get_latest_commit_time(self) -> float:
-        raise NotImplementedError("Don't call me, I am abstract")
+        msg = "Don't call me, I am abstract"
+        raise NotImplementedError(msg)
 
     @abc.abstractmethod
     def _pull_repo(self, target_path: Path) -> None:
-        raise NotImplementedError("Don't call me, I am abstract")
+        msg = "Don't call me, I am abstract"
+        raise NotImplementedError(msg)
 
     @abc.abstractmethod
     def _clone_repo(self, url: str, target_path: Path) -> None:
-        raise NotImplementedError("Don't call me, I am abstract")
+        msg = "Don't call me, I am abstract"
+        raise NotImplementedError(msg)
 
     @abc.abstractmethod
     def _get_clone_url(self) -> str:
-        raise NotImplementedError("Don't call me, I am abstract")
+        msg = "Don't call me, I am abstract"
+        raise NotImplementedError(msg)
 
 
 class GitRepo(Repo):
@@ -177,10 +182,10 @@ class HgRepo(Repo):
 class BackupFolder:
     def __init__(self, root: Path, path: str):
         self.__path = root / path
-        self.__repos: List[Repo] = []
+        self.__repos: list[Repo] = []
 
     @property
-    def repos(self) -> List[Repo]:
+    def repos(self) -> list[Repo]:
         return self.__repos
 
     @property
@@ -191,7 +196,7 @@ class BackupFolder:
     def has_repos(self) -> bool:
         return bool(self.repos)
 
-    def get_relative_repo_paths(self) -> List[Path]:
+    def get_relative_repo_paths(self) -> list[Path]:
         return [repo.path.relative_to(self.path) for repo in self.repos]
 
     def find_repos_in_path(self) -> None:

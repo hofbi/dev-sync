@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import List
 
 import yaml
 
@@ -14,7 +13,7 @@ class YMLConfigParser:
     def get_yaml_content(filename: Path):
         return yaml.load(filename.read_bytes(), Loader=yaml.FullLoader)
 
-    def parse_backup_folder(self) -> List[BackupFolder]:
+    def parse_backup_folder(self) -> list[BackupFolder]:
         backup_folders = self.__content["backupFolder"]
         return [
             BackupFolder(self.parse_home(), element["path"])

@@ -1,6 +1,5 @@
 from pathlib import Path
 from subprocess import CalledProcessError
-from typing import ByteString
 from unittest.mock import MagicMock, patch
 
 from pyfakefs.fake_filesystem_unittest import TestCase
@@ -201,7 +200,7 @@ class HgRepoTest(TestCase):
 
 class GitRepoTest(TestCase):
     @staticmethod
-    def create_test_output(default_branch: str) -> ByteString:
+    def create_test_output(default_branch: str) -> bytes:
         test_output = (
             "  Fetch URL: https://github.com/foo/bar.git\n"
             "  Push  URL: https://github.com/foo/bar.git\n"
