@@ -1,4 +1,3 @@
-import copy
 import subprocess
 from pathlib import Path
 
@@ -33,7 +32,7 @@ def run_backup(parser: YMLConfigParser, target: Target, last_update: int, report
 
 
 class RSync:
-    OPTIONS = [
+    OPTIONS = (
         "-a",  # Make 1 to 1 copy
         "-v",  # Verbose
         "--whole-file",  # Copy whole file without delta algorithm
@@ -43,7 +42,7 @@ class RSync:
         "--modify-window=2",  # Allowing times to differ by up to 2 seconds. Related to FAT 2 second
         # resolution for timestamps
         f"--log-file={LOGFILE}",  # Log to LOGFILE
-    ]
+    )
 
     def __init__(self, root: Path, backup_folders: list[BackupFolder]):
         self.__root = root
@@ -51,7 +50,7 @@ class RSync:
 
     @staticmethod
     def get_options(report: bool, excludes: list[Path]) -> str:
-        options = copy.deepcopy(RSync.OPTIONS)
+        options = list(RSync.OPTIONS)
         if report:
             options.append("-n")  # Rsync Dry Run
 

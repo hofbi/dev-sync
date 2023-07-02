@@ -3,7 +3,7 @@ import datetime
 from pathlib import Path
 
 from devsync.args import dir_path
-from devsync.config import NAME, VERSION
+from devsync.config import NAME
 from devsync.data import Target
 from devsync.log import logger
 from devsync.parser import YMLConfigParser
@@ -11,7 +11,7 @@ from devsync.sync import run_backup
 
 
 def main():
-    logger.success(f"{NAME} {VERSION}\n")
+    logger.success(f"{NAME}\n")
 
     arguments = parse_arguments()
     config = Path(arguments.config.name)

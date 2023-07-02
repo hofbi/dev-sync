@@ -68,14 +68,13 @@ repos:
     rev: 23.3.0
     hooks:
       - id: black
-        language_version: python3
   - repo: https://github.com/PyCQA/docformatter
-    rev: v1.7.1
+    rev: v1.7.3
     hooks:
       - id: docformatter
         additional_dependencies: [tomli]
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.270
+    rev: v0.0.275
     hooks:
       - id: ruff
   - repo: https://github.com/pre-commit/pygrep-hooks
@@ -106,23 +105,23 @@ repos:
     hooks:
       - id: pylint
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.4.0
+    rev: v3.8.0
     hooks:
       - id: pyupgrade
         args: [--py310-plus, --keep-runtime-typing]
   - repo: https://github.com/PyCQA/autoflake
-    rev: v2.1.1
+    rev: v2.2.0
     hooks:
       - id: autoflake
   - repo: https://github.com/asottile/yesqa
-    rev: v1.4.0
+    rev: v1.5.0
     hooks:
       - id: yesqa
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.23.1
+    rev: 0.23.2
     hooks:
       - id: check-github-workflows
   - repo: https://github.com/crate-ci/typos
-    rev: v1.14.12
+    rev: typos-dict-v0.10.5
     hooks:
       - id: typos
