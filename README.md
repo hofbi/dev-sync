@@ -9,7 +9,7 @@ This is a Python-based backup tool using [rsync](https://rsync.samba.org/) inclu
 ## Usage
 
 ```shell
-Dev Sync 1.0
+Dev Sync
 
 usage: devsync.py [-h] [--last_update YEAR MONTH DAY] [--dry-run] target config
 

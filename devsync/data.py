@@ -112,7 +112,7 @@ class GitRepo(Repo):
     def _pull_repo(self, target_path: Path) -> None:
         main_branch = GitRepo.get_default_branch(target_path)
         subprocess.check_call(
-            f"git fetch && git reset --hard origin/{main_branch}",
+            f"git fetch --all --prune && git reset --hard origin/{main_branch}",
             shell=True,
             cwd=target_path,
         )
@@ -131,12 +131,14 @@ class GitRepo(Repo):
     def get_default_branch(target_path: Path) -> str:
         try:
             origin_info = subprocess.check_output(
-                "git remote show origin", shell=True, cwd=target_path
+                "git remote show origin",
+                shell=True,
+                cwd=target_path,
+                env={**os.environ, "LANG": "en_US.UTF-8"},
             ).decode("utf-8")
         except subprocess.CalledProcessError:
             return "master"
-        default_branch_pattern = r"HEAD branch:\s(\w*)"
-        default_branch = re.search(default_branch_pattern, origin_info, re.DOTALL)
+        default_branch = re.search(r"HEAD branch:\s(\w*)", origin_info, re.DOTALL)
         return default_branch.group(1) if default_branch else "master"
 
 
