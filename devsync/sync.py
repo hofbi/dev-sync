@@ -69,9 +69,7 @@ class RSync:
                 f"\tOptions: {options}\n"
             )
             subprocess.check_call(
-                f"rsync {options} {element.path} {target.path}",
-                shell=True,
-                cwd=self.__root,
+                f"rsync {options} {element.path} {target.path}".split(), cwd=self.__root
             )
 
 
