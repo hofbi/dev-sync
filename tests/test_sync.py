@@ -38,8 +38,9 @@ class RSyncTest(TestCase):
         rsync = RSync(Path("/foo"), [backup_folder])
         rsync.sync(Target("/tmp"), False)
         mock_subprocess.check_call.assert_called_with(
-            f"rsync {RSync.get_options(False, [])} {backup_folder.path} {'/tmp'}".split(),
+            f"rsync {RSync.get_options(False, [])} {backup_folder.path} {'/tmp'}",
             cwd=Path("/foo"),
+            shell=True,
         )
 
     @patch("devsync.sync.subprocess")
