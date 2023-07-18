@@ -3,5 +3,8 @@ coverage
 gitpython
 pre-commit
 pyfakefs
+pytest
+pytest-cov
+pytest-sugar
 PyYAML
 verboselogs

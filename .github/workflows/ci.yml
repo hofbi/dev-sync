@@ -21,6 +21,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Tests
-        run: make test
+        run: make coverage
       - name: Check
         run: pre-commit run -a
