@@ -46,7 +46,7 @@ class Repo:
     def __print_update_report(self) -> None:
         logger.debug(
             f"Updating {self.repo_type} Repo {self.path} --> Last Commit "
-            f"{datetime.datetime.utcfromtimestamp(self._get_latest_commit_time)}"
+            f"{datetime.datetime.fromtimestamp(self._get_latest_commit_time, tz=datetime.timezone.utc)}"
         )
 
     def get_repo_target_path(self, root, target: Target) -> Path:
