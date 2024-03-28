@@ -64,10 +64,7 @@ class RSync:
             options = self.get_options(report, excludes)
 
             logger.verbose(f"{len(excludes)} Repos to exclude in {element.path}")
-            logger.debug(
-                f"Running Rsync\n\tSource: {element.path}\n\tTarget: {target.path}\n"
-                f"\tOptions: {options}\n"
-            )
+            logger.debug(f"Running Rsync\n\tSource: {element.path}\n\tTarget: {target.path}\n\tOptions: {options}\n")
             subprocess.check_call(
                 f"rsync {options} {element.path} {target.path}",
                 shell=True,

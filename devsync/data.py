@@ -61,9 +61,7 @@ class Repo:
                 self._pull_repo(target_path)
         else:
             url = self._get_clone_url()
-            logger.debug(
-                f"\tNot Found on target --> clone from {url} into {target_path}\n"
-            )
+            logger.debug(f"\tNot Found on target --> clone from {url} into {target_path}\n")
             if not report:
                 self._clone_repo(url, target_path)
 
@@ -97,9 +95,7 @@ class Repo:
 
 class GitRepo(Repo):
     def _get_clone_url(self) -> str:
-        output = subprocess.check_output(
-            "git remote get-url origin".split(), cwd=self.path
-        )
+        output = subprocess.check_output("git remote get-url origin".split(), cwd=self.path)
         return output.decode("utf-8").split("\n", maxsplit=1)[0]
 
     def _clone_repo(self, url: str, target_path: Path) -> None:
@@ -112,9 +108,7 @@ class GitRepo(Repo):
     def _pull_repo(self, target_path: Path) -> None:
         main_branch = GitRepo.get_default_branch(target_path)
         subprocess.check_call("git fetch --all --prune".split(), cwd=target_path)
-        subprocess.check_call(
-            f"git reset --hard origin/{main_branch}".split(), cwd=target_path
-        )
+        subprocess.check_call(f"git reset --hard origin/{main_branch}".split(), cwd=target_path)
 
     @property
     def repo_type(self) -> str:
@@ -149,9 +143,7 @@ class HgRepo(Repo):
         return ""
 
     def _clone_repo(self, url: str, target_path: Path) -> None:
-        subprocess.check_call(
-            f"hg clone {url}".split(), cwd=target_path.parent.absolute()
-        )
+        subprocess.check_call(f"hg clone {url}".split(), cwd=target_path.parent.absolute())
 
     def _pull_repo(self, target_path: Path) -> None:
         subprocess.check_call("hg pull".split(), cwd=target_path)

@@ -15,10 +15,7 @@ class YMLConfigParser:
 
     def parse_backup_folder(self) -> list[BackupFolder]:
         backup_folders = self.__content["backupFolder"]
-        return [
-            BackupFolder(self.parse_home(), element["path"])
-            for element in backup_folders
-        ]
+        return [BackupFolder(self.parse_home(), element["path"]) for element in backup_folders]
 
     def parse_home(self) -> Path:
         return Path(self.__content["home"])

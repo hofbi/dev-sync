@@ -128,9 +128,7 @@ class RepoTest(TestCase):
 
     def test_get_repo_target_path_correct(self):
         repo = Repo("/foo/blub")
-        self.assertEqual(
-            Path("/tmp/blub"), repo.get_repo_target_path("/foo/", Target("/tmp"))
-        )
+        self.assertEqual(Path("/tmp/blub"), repo.get_repo_target_path("/foo/", Target("/tmp")))
 
     def test_is_update_required_when_last_update_before_last_commit_should_be_true(
         self,

@@ -45,15 +45,17 @@ disable = [
 fix = true
 line-length = 120
 target-version = "py310"
+
+[tool.ruff.lint]
 select = ["ALL"]
 ignore = [
   "ANN",
   "ARG",
   "COM", # Done via black
   "D",
+  "ISC001", # Conflicts with formatter
   "FBT",
   "FIX",
-  "I", # Done via isort
   "PT", # TODO convert to pytest
   "S", # TODO resolve after pytest conversion
   "T",
