@@ -39,3 +39,19 @@ backupFolder:                       # Folders that should be saved (relative to 
   - path: Documents
   - path: Development
 ```
+
+## Development
+
+```shell
+# Install dependencies
+pip install -r requirements.txt
+
+# Install pre-commit hooks
+pre-commit install
+
+# Run tests
+pytest
+
+# Run coverage
+make coverage
+```
