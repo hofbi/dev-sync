@@ -1,6 +1,7 @@
 from pathlib import Path
 
-from pyfakefs.fake_filesystem_unittest import TestCase
+import pytest
+from pyfakefs.fake_filesystem import FakeFilesystem
 
 from devsync.parser import YMLConfigParser
 
@@ -13,24 +14,27 @@ backupFolder:                       # Folders that should be saved (relative to 
 """
 
 
-class YMLConfigParserTest(TestCase):
-    def setUp(self) -> None:
-        self.setUpPyfakefs()
+def test_get_yaml_content_valid_file_not_empty(fs: FakeFilesystem):
+    config = Path("test_config.yml")
+    fs.create_file(config, contents=CONFIG_CONTENT)
+    assert YMLConfigParser.get_yaml_content(config) is not None
 
-        self.config = Path("test_config.yml")
-        self.fs.create_file(self.config, contents=CONFIG_CONTENT)
 
-    def test_get_yaml_content_valid_file_not_empty(self):
-        self.assertIsNotNone(YMLConfigParser.get_yaml_content(self.config))
+def test_get_yaml_content_invalid_file_error():
+    with pytest.raises(FileNotFoundError):
+        YMLConfigParser.get_yaml_content(Path("config/not_existing.yml"))
 
-    def test_get_yaml_content_invalid_file_error(self):
-        with self.assertRaises(FileNotFoundError):
-            YMLConfigParser.get_yaml_content(Path("config/not_existing.yml"))
 
-    def test_parse_home_correct(self):
-        parser = YMLConfigParser(self.config)
-        self.assertEqual(Path("/home/user"), parser.parse_home())
+def test_parse_home_correct(fs: FakeFilesystem):
+    config = Path("test_config.yml")
+    fs.create_file(config, contents=CONFIG_CONTENT)
+    parser = YMLConfigParser(config)
+    assert parser.parse_home() == Path("/home/user")
 
-    def test_parse_backup_folder_correct(self):
-        parser = YMLConfigParser(self.config)
-        self.assertEqual(3, len(parser.parse_backup_folder()))
+
+def test_parse_backup_folder_for_test_config_should_be_3_folders(fs: FakeFilesystem):
+    config = Path("test_config.yml")
+    fs.create_file(config, contents=CONFIG_CONTENT)
+    parser = YMLConfigParser(config)
+    expected_number_of_backup_folders = 3
+    assert len(parser.parse_backup_folder()) == expected_number_of_backup_folders
