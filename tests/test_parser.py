@@ -32,11 +32,8 @@ def test_parse_home_correct(fs: FakeFilesystem):
     assert parser.parse_home() == Path("/home/user")
 
 
-EXPECTED_BACKUP_FOLDER_COUNT = 3
-
-
-def test_parse_backup_folder_correct(fs: FakeFilesystem):
+def test_parse_backup_folder_for_test_config_should_be_3_folders(fs: FakeFilesystem):
     config = Path("test_config.yml")
     fs.create_file(config, contents=CONFIG_CONTENT)
     parser = YMLConfigParser(config)
-    assert len(parser.parse_backup_folder()) == EXPECTED_BACKUP_FOLDER_COUNT
+    assert len(parser.parse_backup_folder()) == 3
