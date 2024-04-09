@@ -36,4 +36,5 @@ def test_parse_backup_folder_for_test_config_should_be_3_folders(fs: FakeFilesys
     config = Path("test_config.yml")
     fs.create_file(config, contents=CONFIG_CONTENT)
     parser = YMLConfigParser(config)
-    assert len(parser.parse_backup_folder()) == 3
+    expected_number_of_backup_folders = 3
+    assert len(parser.parse_backup_folder()) == expected_number_of_backup_folders
