@@ -5,6 +5,23 @@ from devsync.data import BackupFolder, Target
 from devsync.sync import RepoSync, RSync
 
 
+def test_get_options_with_dry_run() -> None:
+    assert "-n" in RSync.get_options(True, [])
+
+
+def test_get_options_without_dry_run() -> None:
+    assert "-n" not in RSync.get_options(False, [])
+
+
+def test_get_options_no_excludes() -> None:
+    assert "--exclude" not in RSync.get_options(False, [])
+
+
+def test_get_options_2_excludes() -> None:
+    assert '--exclude="/tmp/foo"' in RSync.get_options(False, [Path("/tmp/foo"), Path("/tmp/bar")])
+    assert '--exclude="/tmp/bar"' in RSync.get_options(False, [Path("/tmp/foo"), Path("/tmp/bar")])
+
+
 def test_sync_no_excludes(fake_process) -> None:
     backup_folder = BackupFolder(Path("/foo"), "blub")
     backup_folder.get_relative_repo_paths = list
