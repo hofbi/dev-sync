@@ -1,4 +1,3 @@
-import subprocess
 from pathlib import Path
 
 from devsync.data import BackupFolder, Target
@@ -34,25 +33,19 @@ def test_sync_no_excludes(fake_process) -> None:
     assert fake_process.call_count(f"rsync {RSync.get_options(False, [])} {backup_folder.path} /tmp") == 1
 
 
-def test_sync_three_backup_folders(monkeypatch) -> None:
-    class MockCheckCall:
-        def __init__(self):
-            self.call_count = 0
-
-        def __call__(self, *args, **kwargs):
-            self.call_count += 1
-
-    mock_check_call = MockCheckCall()
-    monkeypatch.setattr(subprocess, "check_call", mock_check_call)
-
+def test_sync_three_backup_folders(fake_process):
     backup_folder = BackupFolder(Path("/foo"), "blub")
     backup_folder.get_relative_repo_paths = list
+
+    command = f"rsync {RSync.get_options(False, [])} {backup_folder.path} /tmp"
+
+    fake_process.register(command, occurrences=3)
 
     rsync = RSync(Path("/foo"), [backup_folder, backup_folder, backup_folder])
     rsync.sync(Target("/tmp"), False)
 
-    count = 3
-    assert mock_check_call.call_count == count
+    expected_count = 3
+    assert fake_process.call_count(command) == expected_count
 
 
 def test_sync_no_backup(fake_process) -> None:
