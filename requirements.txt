@@ -5,6 +5,7 @@ pre-commit
 pyfakefs
 pytest
 pytest-cov
+pytest-subprocess
 pytest-sugar
 PyYAML
 verboselogs

@@ -1,64 +1,59 @@
-import unittest
 from pathlib import Path
-from unittest.mock import MagicMock, patch
-
-from pyfakefs.fake_filesystem_unittest import TestCase
 
 from devsync.data import BackupFolder, Target
 from devsync.sync import RepoSync, RSync
 
 
-class RSyncTest(TestCase):
-    def setUp(self) -> None:
-        self.setUpPyfakefs()
-
-    def test_get_options_with_dry_run(self):
-        self.assertIn("-n", RSync.get_options(True, []))
-
-    def test_get_options_without_dry_run(self):
-        self.assertNotIn("-n", RSync.get_options(False, []))
-
-    def test_get_options_no_excludes(self):
-        self.assertNotIn("--exclude", RSync.get_options(False, []))
-
-    def test_get_options_2_excludes(self):
-        self.assertIn(
-            '--exclude="/tmp/foo"',
-            RSync.get_options(False, [Path("/tmp/foo"), Path("/tmp/bar")]),
-        )
-        self.assertIn(
-            '--exclude="/tmp/bar"',
-            RSync.get_options(False, [Path("/tmp/foo"), Path("/tmp/bar")]),
-        )
-
-    @patch("devsync.sync.subprocess")
-    def test_sync_no_excludes(self, mock_subprocess):
-        backup_folder = BackupFolder(Path("/foo"), "blub")
-        backup_folder.get_relative_repo_paths = MagicMock(return_value=[])
-        rsync = RSync(Path("/foo"), [backup_folder])
-        rsync.sync(Target("/tmp"), False)
-        mock_subprocess.check_call.assert_called_with(
-            f"rsync {RSync.get_options(False, [])} {backup_folder.path} {'/tmp'}",
-            cwd=Path("/foo"),
-            shell=True,
-        )
-
-    @patch("devsync.sync.subprocess")
-    def test_sync_three_backup_folders(self, mock_subprocess):
-        backup_folder = BackupFolder(Path("/foo"), "blub")
-        backup_folder.get_relative_repo_paths = MagicMock(return_value=[])
-        rsync = RSync(Path("/foo"), [backup_folder, backup_folder, backup_folder])
-        rsync.sync(Target("/tmp"), False)
-        self.assertEqual(3, mock_subprocess.check_call.call_count)
-
-    @patch("devsync.sync.subprocess")
-    def test_sync_no_backup(self, mock_subprocess):
-        rsync = RSync(Path("/foo"), [])
-        rsync.sync(Target("/tmp"), False)
-        self.assertFalse(mock_subprocess.check_call.called)
+def test_get_options_with_dry_run() -> None:
+    assert "-n" in RSync.get_options(True, [])
 
 
-class RepoSyncTest(unittest.TestCase):
-    def test_get_all_repos_no_repos_set_empty(self):
-        repo_sync = RepoSync(Path(), [])
-        self.assertFalse(repo_sync.get_all_repos())
+def test_get_options_without_dry_run() -> None:
+    assert "-n" not in RSync.get_options(False, [])
+
+
+def test_get_options_no_excludes() -> None:
+    assert "--exclude" not in RSync.get_options(False, [])
+
+
+def test_get_options_2_excludes() -> None:
+    assert '--exclude="/tmp/foo"' in RSync.get_options(False, [Path("/tmp/foo"), Path("/tmp/bar")])
+    assert '--exclude="/tmp/bar"' in RSync.get_options(False, [Path("/tmp/foo"), Path("/tmp/bar")])
+
+
+def test_sync_no_excludes(fake_process) -> None:
+    backup_folder = BackupFolder(Path("/foo"), "blub")
+    backup_folder.get_relative_repo_paths = list
+
+    command = f"rsync {RSync.get_options(False, [])} {backup_folder.path} /tmp"
+
+    fake_process.register(command)
+    rsync = RSync(Path("/foo"), [backup_folder])
+    rsync.sync(Target("/tmp"), False)
+    assert fake_process.call_count(f"rsync {RSync.get_options(False, [])} {backup_folder.path} /tmp") == 1
+
+
+def test_sync_three_backup_folders(fake_process):
+    backup_folder = BackupFolder(Path("/foo"), "blub")
+    backup_folder.get_relative_repo_paths = list
+
+    command = f"rsync {RSync.get_options(False, [])} {backup_folder.path} /tmp"
+
+    fake_process.register(command, occurrences=3)
+
+    rsync = RSync(Path("/foo"), [backup_folder, backup_folder, backup_folder])
+    rsync.sync(Target("/tmp"), False)
+
+    expected_count = 3
+    assert fake_process.call_count(command) == expected_count
+
+
+def test_sync_no_backup(fake_process) -> None:
+    rsync = RSync(Path("/foo"), [])
+    rsync.sync(Target("/tmp"), False)
+    assert not fake_process.calls
+
+
+def test_get_all_repos_no_repos_set_empty() -> None:
+    repo_sync = RepoSync(Path(), [])
+    assert not repo_sync.get_all_repos()
