@@ -5,20 +5,8 @@ repos:
     hooks:
       - id: check-hooks-apply
       - id: check-useless-excludes
-  - repo: local
-    hooks:
-      - id: check-snake-case
-        name: check snake case
-        description: Check that all files are snake_case
-        entry: file names and paths must be snake_case
-        language: fail
-        files: "-|[A-Z]"
-        types_or:
-          - c++
-          - python
-          - shell
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v4.6.0
     hooks:
       - id: check-added-large-files
       - id: check-case-conflict
@@ -35,6 +23,10 @@ repos:
           - --pytest-test-first
       - id: requirements-txt-fixer
       - id: trailing-whitespace
+  - repo: https://github.com/luminartech/dev-tools
+    rev: 33a1bfc8782eeece3810552600b04d6cac8b8976
+    hooks:
+      - id: check-snake-case
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.17
     hooks:
@@ -46,15 +38,14 @@ repos:
           - mdformat-config
           - mdformat-toc
   - repo: https://github.com/tcort/markdown-link-check
-    rev: v3.12.1
+    rev: v3.12.2
     hooks:
       - id: markdown-link-check
         args: ["--quiet", "--config", ".md-link-config.json"]
-  - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
-    rev: 0.2.3
+  - repo: https://github.com/google/yamlfmt
+    rev: v0.13.0
     hooks:
       - id: yamlfmt
-        args: [--mapping=2, --sequence=4, --offset=2, --implicit_start, --preserve-quotes]
   - repo: https://github.com/adrienverge/yamllint
     rev: v1.35.1
     hooks:
@@ -69,8 +60,8 @@ repos:
     hooks:
       - id: docformatter
         additional_dependencies: [tomli]
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.3.5
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.5.5
     hooks:
       - id: ruff-format
       - id: ruff
@@ -84,7 +75,7 @@ repos:
       - id: python-no-log-warn
       - id: python-use-type-annotations
   - repo: https://github.com/PyCQA/flake8
-    rev: 7.0.0
+    rev: 7.1.0
     hooks:
       - id: flake8
         additional_dependencies:
@@ -92,11 +83,11 @@ repos:
           - flake8-bugbear
           - flake8-requirements
   - repo: https://github.com/PyCQA/pylint
-    rev: v3.1.0
+    rev: v3.2.6
     hooks:
       - id: pylint
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.15.2
+    rev: v3.17.0
     hooks:
       - id: pyupgrade
         args: [--py310-plus, --keep-runtime-typing]
@@ -109,10 +100,10 @@ repos:
     hooks:
       - id: yesqa
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.28.1
+    rev: 0.29.1
     hooks:
       - id: check-github-workflows
   - repo: https://github.com/crate-ci/typos
-    rev: v1.20.4
+    rev: v1.23.5
     hooks:
       - id: typos
