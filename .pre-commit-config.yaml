@@ -61,7 +61,7 @@ repos:
       - id: docformatter
         additional_dependencies: [tomli]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.5.7
+    rev: v0.6.3
     hooks:
       - id: ruff-format
       - id: ruff
@@ -83,7 +83,7 @@ repos:
           - flake8-bugbear
           - flake8-requirements
   - repo: https://github.com/PyCQA/pylint
-    rev: v3.2.6
+    rev: v3.2.7
     hooks:
       - id: pylint
   - repo: https://github.com/asottile/pyupgrade
@@ -100,10 +100,10 @@ repos:
     hooks:
       - id: yesqa
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.29.1
+    rev: 0.29.2
     hooks:
       - id: check-github-workflows
   - repo: https://github.com/crate-ci/typos
-    rev: v1.23.6
+    rev: typos-dict-v0.11.27
     hooks:
       - id: typos
