@@ -58,8 +58,7 @@ def parse_arguments():
         nargs=3,
         action=DateAction,
         default=(1970, 1, 1),
-        help="Last time update was performed. This will just update repositories after this date. "
-        "Format: YYYY MM DD",
+        help="Last time update was performed. This will just update repositories after this date. Format: YYYY MM DD",
     )
     parser.add_argument(
         "--dry-run",
