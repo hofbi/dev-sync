@@ -11,10 +11,6 @@ extend-ignore = ["E203"]
 [tool.flake8.known-modules]
 "" = ["devsync"]
 
-[tool.isort]
-profile = "black"
-multi_line_output = 3
-
 [tool.pylint.BASIC]
 # Stick to snake case, but accept setUp and tearDown from unittest
 method-rgx = "(([a-z_][a-z0-9_]*)|(setUp)|(tearDown))$"
@@ -51,7 +47,7 @@ select = ["ALL"]
 ignore = [
   "ANN",
   "ARG",
-  "COM", # Done via black
+  "COM", # Done by the formatter
   "D",
   "ISC001", # Conflicts with formatter
   "FBT",

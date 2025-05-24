@@ -95,7 +95,7 @@ class Repo:
 
 class GitRepo(Repo):
     def _get_clone_url(self) -> str:
-        output = subprocess.check_output("git remote get-url origin".split(), cwd=self.path)
+        output = subprocess.check_output(["git", "remote", "get-url", "origin"], cwd=self.path)
         return output.decode("utf-8").split("\n", maxsplit=1)[0]
 
     def _clone_repo(self, url: str, target_path: Path) -> None:
@@ -107,7 +107,7 @@ class GitRepo(Repo):
 
     def _pull_repo(self, target_path: Path) -> None:
         main_branch = GitRepo.get_default_branch(target_path)
-        subprocess.check_call("git fetch --all --prune".split(), cwd=target_path)
+        subprocess.check_call(["git", "fetch", "--all", "--prune"], cwd=target_path)
         subprocess.check_call(f"git reset --hard origin/{main_branch}".split(), cwd=target_path)
 
     @property
@@ -124,7 +124,7 @@ class GitRepo(Repo):
     def get_default_branch(target_path: Path) -> str:
         try:
             origin_info = subprocess.check_output(
-                "git remote show origin".split(),
+                ["git", "remote", "show", "origin"],
                 cwd=target_path,
                 env={"LANG": "en_US.UTF-8"},
             ).decode("utf-8")
@@ -136,7 +136,7 @@ class GitRepo(Repo):
 
 class HgRepo(Repo):
     def _get_clone_url(self) -> str:
-        output = subprocess.check_output("hg paths".split(), cwd=self.path)
+        output = subprocess.check_output(["hg", "paths"], cwd=self.path)
         for item in output.decode("utf-8").split("\n"):
             if "default" in item:
                 return self.parse_remote(item)
@@ -146,8 +146,8 @@ class HgRepo(Repo):
         subprocess.check_call(f"hg clone {url}".split(), cwd=target_path.parent.absolute())
 
     def _pull_repo(self, target_path: Path) -> None:
-        subprocess.check_call("hg pull".split(), cwd=target_path)
-        subprocess.check_call("hg up".split(), cwd=target_path)
+        subprocess.check_call(["hg", "pull"], cwd=target_path)
+        subprocess.check_call(["hg", "up"], cwd=target_path)
 
     @property
     def repo_type(self) -> str:
@@ -155,7 +155,7 @@ class HgRepo(Repo):
 
     @property
     def _get_latest_commit_time(self) -> float:
-        output = subprocess.check_output("hg heads".split(), cwd=self.path)
+        output = subprocess.check_output(["hg", "heads"], cwd=self.path)
         for item in output.decode("utf-8").split("\n"):
             if "date:" in item:
                 return self.parse_date(item)

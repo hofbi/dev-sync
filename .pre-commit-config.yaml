@@ -24,11 +24,11 @@ repos:
       - id: requirements-txt-fixer
       - id: trailing-whitespace
   - repo: https://github.com/luminartech/dev-tools
-    rev: 0.8.0
+    rev: 0.12.3
     hooks:
       - id: check-snake-case
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.21
+    rev: 0.7.22
     hooks:
       - id: mdformat
         additional_dependencies:
@@ -38,16 +38,16 @@ repos:
           - mdformat-config
           - mdformat-toc
   - repo: https://github.com/tcort/markdown-link-check
-    rev: v3.12.2
+    rev: v3.13.7
     hooks:
       - id: markdown-link-check
         args: ["--quiet", "--config", ".md-link-config.json"]
   - repo: https://github.com/google/yamlfmt
-    rev: v0.15.0
+    rev: v0.16.0
     hooks:
       - id: yamlfmt
   - repo: https://github.com/adrienverge/yamllint
-    rev: v1.35.1
+    rev: v1.37.1
     hooks:
       - id: yamllint
         args: [--strict]
@@ -56,16 +56,15 @@ repos:
     hooks:
       - id: toml-sort-fix
   - repo: https://github.com/PyCQA/docformatter
-    # Use tag > v1.7.5 if available
-    rev: eb1df347edd128b30cd3368dddc3aa65edcfac38
+    rev: v1.7.7
     hooks:
       - id: docformatter
         additional_dependencies: [tomli]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.9.1
+    rev: v0.11.11
     hooks:
       - id: ruff-format
-      - id: ruff
+      - id: ruff-check
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.10.0
     hooks:
@@ -76,7 +75,7 @@ repos:
       - id: python-no-log-warn
       - id: python-use-type-annotations
   - repo: https://github.com/PyCQA/flake8
-    rev: 7.1.1
+    rev: 7.2.0
     hooks:
       - id: flake8
         additional_dependencies:
@@ -84,11 +83,11 @@ repos:
           - flake8-bugbear
           - flake8-requirements
   - repo: https://github.com/PyCQA/pylint
-    rev: v3.3.3
+    rev: v3.3.7
     hooks:
       - id: pylint
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.19.1
+    rev: v3.20.0
     hooks:
       - id: pyupgrade
         args: [--py310-plus, --keep-runtime-typing]
@@ -101,10 +100,10 @@ repos:
     hooks:
       - id: yesqa
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.31.0
+    rev: 0.33.0
     hooks:
       - id: check-github-workflows
   - repo: https://github.com/crate-ci/typos
-    rev: dictgen-v0.3.1
+    rev: v1.32.0
     hooks:
       - id: typos
