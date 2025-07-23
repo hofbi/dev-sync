@@ -24,7 +24,7 @@ repos:
       - id: requirements-txt-fixer
       - id: trailing-whitespace
   - repo: https://github.com/luminartech/dev-tools
-    rev: 0.12.3
+    rev: 0.14.0
     hooks:
       - id: check-snake-case
   - repo: https://github.com/executablebooks/mdformat
@@ -43,7 +43,7 @@ repos:
       - id: markdown-link-check
         args: ["--quiet", "--config", ".md-link-config.json"]
   - repo: https://github.com/google/yamlfmt
-    rev: v0.16.0
+    rev: v0.17.2
     hooks:
       - id: yamlfmt
   - repo: https://github.com/adrienverge/yamllint
@@ -61,7 +61,7 @@ repos:
       - id: docformatter
         additional_dependencies: [tomli]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.11.11
+    rev: v0.12.4
     hooks:
       - id: ruff-format
       - id: ruff-check
@@ -75,7 +75,7 @@ repos:
       - id: python-no-log-warn
       - id: python-use-type-annotations
   - repo: https://github.com/PyCQA/flake8
-    rev: 7.2.0
+    rev: 7.3.0
     hooks:
       - id: flake8
         additional_dependencies:
@@ -100,10 +100,10 @@ repos:
     hooks:
       - id: yesqa
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.33.0
+    rev: 0.33.2
     hooks:
       - id: check-github-workflows
   - repo: https://github.com/crate-ci/typos
-    rev: v1.32.0
+    rev: v1.34.0
     hooks:
       - id: typos
