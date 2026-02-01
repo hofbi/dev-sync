@@ -7,6 +7,3 @@ clean:
 
 coverage:
 	pytest --cov=devsync --cov-report=term-missing --cov-report=xml --cov-report=html tests/
-
-install:
-	pip3 install -U -r requirements.txt

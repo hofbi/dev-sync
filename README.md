@@ -44,7 +44,7 @@ backupFolder:                       # Folders that should be saved (relative to 
 
 ```shell
 # Install dependencies
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 
 # Install pre-commit hooks
 pre-commit install
