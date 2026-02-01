@@ -6,7 +6,7 @@ repos:
       - id: check-hooks-apply
       - id: check-useless-excludes
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: check-added-large-files
       - id: check-case-conflict
@@ -24,11 +24,11 @@ repos:
       - id: requirements-txt-fixer
       - id: trailing-whitespace
   - repo: https://github.com/luminartech/dev-tools
-    rev: 0.14.0
+    rev: 0.14.2
     hooks:
       - id: check-snake-case
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.22
+    rev: 1.0.0
     hooks:
       - id: mdformat
         additional_dependencies:
@@ -38,21 +38,21 @@ repos:
           - mdformat-config
           - mdformat-toc
   - repo: https://github.com/tcort/markdown-link-check
-    rev: v3.13.7
+    rev: v3.14.2
     hooks:
       - id: markdown-link-check
         args: ["--quiet", "--config", ".md-link-config.json"]
   - repo: https://github.com/google/yamlfmt
-    rev: v0.17.2
+    rev: v0.21.0
     hooks:
       - id: yamlfmt
   - repo: https://github.com/adrienverge/yamllint
-    rev: v1.37.1
+    rev: v1.38.0
     hooks:
       - id: yamllint
         args: [--strict]
   - repo: https://github.com/pappasam/toml-sort
-    rev: v0.24.2
+    rev: v0.24.3
     hooks:
       - id: toml-sort-fix
   - repo: https://github.com/PyCQA/docformatter
@@ -61,7 +61,7 @@ repos:
       - id: docformatter
         additional_dependencies: [tomli]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.12.4
+    rev: v0.14.14
     hooks:
       - id: ruff-format
       - id: ruff-check
@@ -83,11 +83,11 @@ repos:
           - flake8-bugbear
           - flake8-requirements
   - repo: https://github.com/PyCQA/pylint
-    rev: v3.3.7
+    rev: v4.0.4
     hooks:
       - id: pylint
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.20.0
+    rev: v3.21.2
     hooks:
       - id: pyupgrade
         args: [--py310-plus, --keep-runtime-typing]
@@ -100,10 +100,10 @@ repos:
     hooks:
       - id: yesqa
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.33.2
+    rev: 0.36.1
     hooks:
       - id: check-github-workflows
   - repo: https://github.com/crate-ci/typos
-    rev: v1.34.0
+    rev: v1.42.3
     hooks:
       - id: typos
