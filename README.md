@@ -7,6 +7,8 @@ This is a Python-based backup tool using [rsync](https://rsync.samba.org/) inclu
 
 ## Usage
 
+Run `uv run devsync --help` to get:
+
 ```shell
 Dev Sync
 
