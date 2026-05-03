@@ -1,7 +1,6 @@
 # Dev Sync
 
 [![Actions Status](https://github.com/hofbi/dev-sync/workflows/CI/badge.svg)](https://github.com/hofbi/dev-sync)
-[![Actions Status](https://github.com/hofbi/dev-sync/workflows/CodeQL/badge.svg)](https://github.com/hofbi/dev-sync)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 This is a Python-based backup tool using [rsync](https://rsync.samba.org/) including backups for repositories based on [Git](https://git-scm.com/) and [Mercurial](https://www.mercurial-scm.org/).
