@@ -6,3 +6,10 @@ def dir_path(path_string: str) -> Path:
     if Path(path_string).is_dir():
         return Path(path_string)
     raise NotADirectoryError(path_string)
+
+
+def file_path(path_string: str) -> Path:
+    """Argparse type check if path is a file."""
+    if Path(path_string).is_file():
+        return Path(path_string)
+    raise FileNotFoundError(path_string)

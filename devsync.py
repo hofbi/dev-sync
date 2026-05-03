@@ -1,8 +1,7 @@
 import argparse
 import datetime
-from pathlib import Path
 
-from devsync.args import dir_path
+from devsync.args import dir_path, file_path
 from devsync.config import NAME
 from devsync.data import Target
 from devsync.log import logger
@@ -14,7 +13,7 @@ def main():
     logger.success(f"{NAME}\n")
 
     arguments = parse_arguments()
-    config = Path(arguments.config.name)
+    config = arguments.config
     backup_target = Target(arguments.target)
 
     logger.verbose(f"Use config from: {config}\n\n{config.read_text()}")
@@ -48,7 +47,7 @@ def parse_arguments():
     )
     parser.add_argument(
         "config",
-        type=argparse.FileType("r"),
+        type=file_path,
         help="Path to config file",
     )
     parser.add_argument(

@@ -1,9 +1,3 @@
-[tool.docformatter]
-in-place = true
-recursive = true
-wrap-summaries = 88
-wrap-descriptions = 81
-
 [tool.flake8]
 max-line-length = 120
 extend-ignore = ["E203"]
@@ -48,7 +42,16 @@ ignore = [
   "ANN",
   "ARG",
   "COM", # Done by the formatter
-  "D",
+  "D100", # In our opinion overkill
+  "D101", # In our opinion overkill
+  "D102", # In our opinion overkill
+  "D103",
+  "D104", # In our opinion overkill
+  "D105", # In our opinion overkill
+  "D106", # In our opinion overkill
+  "D107", # In our opinion overkill
+  "D203", # Conflicts with ruff-format, incpompatible with D211
+  "D213", # Incompatible with D212
   "ISC001", # Conflicts with formatter
   "FBT",
   "FIX",
