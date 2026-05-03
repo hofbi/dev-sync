@@ -10,14 +10,14 @@ from dev_sync.sync import run_backup
 
 
 def main():
-    logger.info(f"{NAME}\n")
+    logger.info("%s\n", NAME)
 
     arguments = parse_arguments()
     config = arguments.config
     backup_target = Target(arguments.target)
 
-    logger.info(f"Use config from: {config}\n\n{config.read_text()}")
-    logger.info(f"Starting Backup for {backup_target.path}\n")
+    logger.info("Use config from: %s\n\n%s", config, config.read_text())
+    logger.info("Starting Backup for %s\n", backup_target.path)
     yaml_parser = YMLConfigParser(config)
     run_backup(yaml_parser, backup_target, arguments.last_update, arguments.dry_run)
 

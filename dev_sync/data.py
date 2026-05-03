@@ -45,8 +45,10 @@ class Repo:
 
     def __print_update_report(self) -> None:
         logger.debug(
-            f"Updating {self.repo_type} Repo {self.path} --> Last Commit "
-            f"{datetime.datetime.fromtimestamp(self._get_latest_commit_time, tz=datetime.timezone.utc)}"
+            "Updating %s Repo %s --> Last Commit %s",
+            self.repo_type,
+            self.path,
+            datetime.datetime.fromtimestamp(self._get_latest_commit_time, tz=datetime.timezone.utc),
         )
 
     def get_repo_target_path(self, root, target: Target) -> Path:
@@ -56,12 +58,12 @@ class Repo:
         self.__print_update_report()
         target_path = self.get_repo_target_path(root, target)
         if target_path.exists():
-            logger.debug(f"\tFound on target {target_path} --> pull\n")
+            logger.debug("\tFound on target %s --> pull\n", target_path)
             if not report:
                 self._pull_repo(target_path)
         else:
             url = self._get_clone_url()
-            logger.debug(f"\tNot Found on target --> clone from {url} into {target_path}\n")
+            logger.debug("\tNot Found on target --> clone from %s into %s\n", url, target_path)
             if not report:
                 self._clone_repo(url, target_path)
 

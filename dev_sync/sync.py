@@ -63,8 +63,10 @@ class RSync:
             excludes = element.get_relative_repo_paths()
             options = self.get_options(report, excludes)
 
-            logger.info(f"{len(excludes)} Repos to exclude in {element.path}")
-            logger.debug(f"Running Rsync\n\tSource: {element.path}\n\tTarget: {target.path}\n\tOptions: {options}\n")
+            logger.info("%d Repos to exclude in %s", len(excludes), element.path)
+            logger.debug(
+                "Running Rsync\n\tSource: %s\n\tTarget: %s\n\tOptions: %s\n", element.path, target.path, options
+            )
             subprocess.check_call(
                 f"rsync {options} {element.path} {target.path}",
                 shell=True,
@@ -80,10 +82,10 @@ class RepoSync:
 
     def update_repos(self, target: Target, last_update: int, report: bool):
         all_repos = self.get_all_repos()
-        logger.info(f"{len(all_repos)} repos found in all paths")
+        logger.info("%d repos found in all paths", len(all_repos))
 
         all_repos = [repo for repo in all_repos if repo.is_update_required(last_update)]
-        logger.info(f"{len(all_repos)} repos to update on target {target.path}\n")
+        logger.info("%d repos to update on target %s\n", len(all_repos), target.path)
 
         for repo in all_repos:
             repo.update_repo_on_target(self.__root, target, report)
@@ -92,7 +94,7 @@ class RepoSync:
         all_repos = []
         for element in self.__backup_folders:
             repos = element.repos
-            logger.info(f"--> {len(repos)} repos found in path {element.path}")
+            logger.info("--> %d repos found in path %s", len(repos), element.path)
             all_repos.extend(repos)
 
         return all_repos

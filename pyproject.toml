@@ -14,11 +14,8 @@ requires-python = ">=3.10"
 dependencies = [
   "PyYAML",
   "gitpython",
-  "coloredlogs",
+  "colorlog"
 ]
-
-[project.scripts]
-devsync = "devsync:main"
 
 [project.optional-dependencies]
 dev = [
@@ -28,6 +25,9 @@ dev = [
   "pytest-subprocess",
   "pytest-sugar"
 ]
+
+[project.scripts]
+devsync = "devsync:main"
 
 [tool.flake8]
 max-line-length = 120
@@ -70,6 +70,7 @@ testpaths = [
 
 [tool.ruff]
 fix = true
+unsafe-fixes = true
 line-length = 120
 target-version = "py310"
 
