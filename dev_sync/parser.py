@@ -2,7 +2,7 @@ from pathlib import Path
 
 import yaml
 
-from devsync.data import BackupFolder
+from dev_sync.data import BackupFolder
 
 
 class YMLConfigParser:

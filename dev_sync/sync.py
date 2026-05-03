@@ -1,10 +1,10 @@
 import subprocess
 from pathlib import Path
 
-from devsync.config import LOGFILE
-from devsync.data import BackupFolder, Repo, Target
-from devsync.log import logger
-from devsync.parser import YMLConfigParser
+from dev_sync.config import LOGFILE
+from dev_sync.data import BackupFolder, Repo, Target
+from dev_sync.log import logger
+from dev_sync.parser import YMLConfigParser
 
 
 def run_backup(parser: YMLConfigParser, target: Target, last_update: int, report: bool):

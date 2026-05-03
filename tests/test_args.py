@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 from pyfakefs.fake_filesystem import FakeFilesystem
 
-from devsync.args import dir_path, file_path
+from dev_sync.args import dir_path, file_path
 
 
 def test_dir_path__is_dir__input_path(fs: FakeFilesystem) -> None:

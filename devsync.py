@@ -1,12 +1,12 @@
 import argparse
 import datetime
 
-from devsync.args import dir_path, file_path
-from devsync.config import NAME
-from devsync.data import Target
-from devsync.log import logger
-from devsync.parser import YMLConfigParser
-from devsync.sync import run_backup
+from dev_sync.args import dir_path, file_path
+from dev_sync.config import NAME
+from dev_sync.data import Target
+from dev_sync.log import logger
+from dev_sync.parser import YMLConfigParser
+from dev_sync.sync import run_backup
 
 
 def main():

@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from devsync.data import BackupFolder, Target
-from devsync.sync import RepoSync, RSync
+from dev_sync.data import BackupFolder, Target
+from dev_sync.sync import RepoSync, RSync
 
 
 def test_get_options_with_dry_run() -> None:

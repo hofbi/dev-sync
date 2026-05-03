@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 
 from pyfakefs.fake_filesystem_unittest import TestCase
 
-from devsync.data import BackupFolder, GitRepo, HgRepo, Repo, Target
+from dev_sync.data import BackupFolder, GitRepo, HgRepo, Repo, Target
 
 
 class TargetTest(TestCase):

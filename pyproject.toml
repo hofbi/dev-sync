@@ -1,9 +1,41 @@
+[build-system]
+requires = ["uv_build>=0.10.0,<0.12"]
+build-backend = "uv_build"
+
+[project]
+name = "dev-sync"
+version = "0.0.0"
+description = ""
+readme = "README.md"
+authors = [
+  {name = "Markus Hofbauer"}
+]
+requires-python = ">=3.10"
+dependencies = [
+  "PyYAML",
+  "gitpython",
+  "coloredlogs",
+  "verboselogs"
+]
+
+[project.scripts]
+devsync = "devsync:main"
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=9.0.3",
+  "pytest-cov",
+  "pyfakefs",
+  "pytest-subprocess",
+  "pytest-sugar"
+]
+
 [tool.flake8]
 max-line-length = 120
 extend-ignore = ["E203"]
 
 [tool.flake8.known-modules]
-"" = ["devsync"]
+"" = ["dev_sync"]
 
 [tool.pylint.BASIC]
 # Stick to snake case, but accept setUp and tearDown from unittest
@@ -29,6 +61,12 @@ disable = [
   "fixme",
   "too-few-public-methods",
   "no-name-in-module"
+]
+
+[tool.pytest.ini_options]
+addopts = "--cov-report term-missing --cov=dev_sync -vv"
+testpaths = [
+  "tests"
 ]
 
 [tool.ruff]
@@ -60,3 +98,6 @@ ignore = [
   "T",
   "TD"
 ]
+
+[tool.uv.build-backend]
+module-root = "" # required to avoid the "src" layout, which is the default for uv_build

@@ -7,7 +7,7 @@ from pathlib import Path
 
 import git
 
-from devsync.log import logger
+from dev_sync.log import logger
 
 
 class Target:

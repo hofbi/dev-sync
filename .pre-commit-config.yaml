@@ -21,7 +21,6 @@ repos:
       - id: name-tests-test
         args:
           - --pytest-test-first
-      - id: requirements-txt-fixer
       - id: pretty-format-json
         args:
           - --autofix

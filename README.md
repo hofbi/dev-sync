@@ -31,7 +31,7 @@ optional arguments:
 
 The config file defines which folders should be saved. A sample config could look like below, which will backup all folders from `backupFolder` list relative to `home`
 
-```shell
+```yaml
 home: /home/user                    # Source root folder
 
 backupFolder:                       # Folders that should be saved (relative to "home" variable)
@@ -44,14 +44,12 @@ backupFolder:                       # Folders that should be saved (relative to 
 
 ```shell
 # Install dependencies
-uv pip install -r requirements.txt
-
-# Install pre-commit hooks
-pre-commit install
+uv sync --extra dev
 
 # Run tests
-pytest
+uv run pytest
 
-# Run coverage
-make coverage
+# Install pre-commit hooks
+uv tool install prek
+prek install
 ```

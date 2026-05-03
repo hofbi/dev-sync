@@ -5,7 +5,7 @@ from pathlib import Path
 import coloredlogs
 from verboselogs import VerboseLogger
 
-from devsync.config import LOGFILE, NAME
+from dev_sync.config import LOGFILE, NAME
 
 
 def init_logging(logfile: Path) -> VerboseLogger:

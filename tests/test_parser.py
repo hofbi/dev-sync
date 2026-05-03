@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 from pyfakefs.fake_filesystem import FakeFilesystem
 
-from devsync.parser import YMLConfigParser
+from dev_sync.parser import YMLConfigParser
 
 CONFIG_CONTENT = """
 home: /home/user                    # Source root folder
