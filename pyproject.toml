@@ -15,7 +15,6 @@ dependencies = [
   "PyYAML",
   "gitpython",
   "coloredlogs",
-  "verboselogs"
 ]
 
 [project.scripts]

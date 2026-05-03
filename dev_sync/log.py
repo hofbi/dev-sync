@@ -1,15 +1,15 @@
 import logging
+from logging import Logger
 from logging.handlers import TimedRotatingFileHandler
 from pathlib import Path
 
 import coloredlogs
-from verboselogs import VerboseLogger
 
 from dev_sync.config import LOGFILE, NAME
 
 
-def init_logging(logfile: Path) -> VerboseLogger:
-    dev_sync_logger = VerboseLogger(NAME)
+def init_logging(logfile: Path) -> Logger:
+    dev_sync_logger = logging.getLogger(NAME)
 
     logfile.parent.mkdir(exist_ok=True, parents=True)
 

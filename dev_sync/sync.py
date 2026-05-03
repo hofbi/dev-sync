@@ -15,7 +15,7 @@ def run_backup(parser: YMLConfigParser, target: Target, last_update: int, report
         backup_folder.find_repos_in_path()
 
     if target.is_relative_to(home):
-        logger.notice("Target is relative to root. Updating local repos only.")
+        logger.info("Target is relative to root. Updating local repos only.")
         target = Target(home)
 
     logger.info("Updating Repos...\n")
@@ -63,7 +63,7 @@ class RSync:
             excludes = element.get_relative_repo_paths()
             options = self.get_options(report, excludes)
 
-            logger.verbose(f"{len(excludes)} Repos to exclude in {element.path}")
+            logger.info(f"{len(excludes)} Repos to exclude in {element.path}")
             logger.debug(f"Running Rsync\n\tSource: {element.path}\n\tTarget: {target.path}\n\tOptions: {options}\n")
             subprocess.check_call(
                 f"rsync {options} {element.path} {target.path}",
@@ -80,10 +80,10 @@ class RepoSync:
 
     def update_repos(self, target: Target, last_update: int, report: bool):
         all_repos = self.get_all_repos()
-        logger.verbose(f"{len(all_repos)} repos found in all paths")
+        logger.info(f"{len(all_repos)} repos found in all paths")
 
         all_repos = [repo for repo in all_repos if repo.is_update_required(last_update)]
-        logger.verbose(f"{len(all_repos)} repos to update on target {target.path}\n")
+        logger.info(f"{len(all_repos)} repos to update on target {target.path}\n")
 
         for repo in all_repos:
             repo.update_repo_on_target(self.__root, target, report)
@@ -92,7 +92,7 @@ class RepoSync:
         all_repos = []
         for element in self.__backup_folders:
             repos = element.repos
-            logger.verbose(f"--> {len(repos)} repos found in path {element.path}")
+            logger.info(f"--> {len(repos)} repos found in path {element.path}")
             all_repos.extend(repos)
 
         return all_repos
