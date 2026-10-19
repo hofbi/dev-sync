@@ -1,5 +1,5 @@
 import argparse
-import datetime
+import datetime as dt
 
 from dev_sync.args import dir_path, file_path
 from dev_sync.config import NAME
@@ -27,11 +27,11 @@ def main():
 def parse_arguments():
     class DateAction(argparse.Action):
         def __call__(self, arg_parser, args, values, option_string=None):
-            last_update = datetime.datetime(
+            last_update = dt.datetime(
                 year=int(values[0]),
                 month=int(values[1]),
                 day=int(values[2]),
-                tzinfo=datetime.timezone.utc,
+                tzinfo=dt.timezone.utc,
             ).timestamp()
             setattr(args, self.dest, last_update)
 

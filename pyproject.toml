@@ -8,7 +8,7 @@ version = "0.0.0"
 description = ""
 readme = "README.md"
 authors = [
-  {name = "Markus Hofbauer"}
+  { name = "Markus Hofbauer" }
 ]
 requires-python = ">=3.10"
 dependencies = [
@@ -29,39 +29,6 @@ dev = [
 [project.scripts]
 devsync = "devsync:main"
 
-[tool.flake8]
-max-line-length = 120
-extend-ignore = ["E203"]
-
-[tool.flake8.known-modules]
-"" = ["dev_sync"]
-
-[tool.pylint.BASIC]
-# Stick to snake case, but accept setUp and tearDown from unittest
-method-rgx = "(([a-z_][a-z0-9_]*)|(setUp)|(tearDown))$"
-
-[tool.pylint.FORMAT]
-max-line-length = 120
-
-[tool.pylint.MASTER]
-# Add files or directories to the blacklist. They should be base names, not paths.
-ignore = ["venv"]
-
-[tool.pylint."MESSAGES CONTROL"]
-# Only show warnings with the listed confidence levels. Leave empty to show
-# all. Valid levels: HIGH, INFERENCE, INFERENCE_FAILURE, UNDEFINED
-confidence = ""
-disable = [
-  "missing-function-docstring",
-  "missing-class-docstring",
-  "missing-module-docstring",
-  "import-error", # disabled since pre-commit runs pylint in a separate venv
-  "unspecified-encoding",
-  "fixme",
-  "too-few-public-methods",
-  "no-name-in-module"
-]
-
 [tool.pytest.ini_options]
 addopts = "--cov-report term-missing --cov=dev_sync -vv"
 testpaths = [
@@ -80,6 +47,7 @@ ignore = [
   "ANN",
   "ARG",
   "COM", # Done by the formatter
+  "CPY001",
   "D100", # In our opinion overkill
   "D101", # In our opinion overkill
   "D102", # In our opinion overkill

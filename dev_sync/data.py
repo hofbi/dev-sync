@@ -1,5 +1,5 @@
 import abc
-import datetime
+import datetime as dt
 import os
 import re
 import subprocess
@@ -48,7 +48,7 @@ class Repo:
             "Updating %s Repo %s --> Last Commit %s",
             self.repo_type,
             self.path,
-            datetime.datetime.fromtimestamp(self._get_latest_commit_time, tz=datetime.timezone.utc),
+            dt.datetime.fromtimestamp(self._get_latest_commit_time, tz=dt.timezone.utc),
         )
 
     def get_repo_target_path(self, root, target: Target) -> Path:
@@ -166,7 +166,7 @@ class HgRepo(Repo):
     @staticmethod
     def parse_date(item: str) -> float:
         date_str = item[5:].lstrip()
-        date = datetime.datetime.strptime(date_str, "%a %b %d %H:%M:%S %Y %z")
+        date = dt.datetime.strptime(date_str, "%a %b %d %H:%M:%S %Y %z")
         return date.timestamp()
 
     @staticmethod
