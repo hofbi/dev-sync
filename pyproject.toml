@@ -1,5 +1,5 @@
 [build-system]
-requires = ["uv_build>=0.10.0,<0.12"]
+requires = ["uv_build>=0.12.2,<0.13"]
 build-backend = "uv_build"
 
 [project]
@@ -10,7 +10,7 @@ readme = "README.md"
 authors = [
   { name = "Markus Hofbauer" }
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 dependencies = [
   "PyYAML",
   "gitpython",
@@ -39,7 +39,7 @@ testpaths = [
 fix = true
 unsafe-fixes = true
 line-length = 120
-target-version = "py310"
+target-version = "py312"
 
 [tool.ruff.lint]
 select = ["ALL"]

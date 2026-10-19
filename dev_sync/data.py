@@ -48,7 +48,7 @@ class Repo:
             "Updating %s Repo %s --> Last Commit %s",
             self.repo_type,
             self.path,
-            dt.datetime.fromtimestamp(self._get_latest_commit_time, tz=dt.timezone.utc),
+            dt.datetime.fromtimestamp(self._get_latest_commit_time, tz=dt.UTC),
         )
 
     def get_repo_target_path(self, root, target: Target) -> Path:

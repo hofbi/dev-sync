@@ -31,7 +31,7 @@ def parse_arguments():
                 year=int(values[0]),
                 month=int(values[1]),
                 day=int(values[2]),
-                tzinfo=dt.timezone.utc,
+                tzinfo=dt.UTC,
             ).timestamp()
             setattr(args, self.dest, last_update)
 
